@@ -65,7 +65,7 @@ The Cowchain Farm web app in this repository was developed using `Flutter versio
     - [Publishing your Flutter apps into GitHub pages](https://dev.to/rodrigocastro_o/publishing-your-flutter-apps-into-github-pages-1l61)
     - *YouTube:* [Flutter Tutorial - Host Flutter Website On GitHub Pages](https://www.youtube.com/watch?v=z-yOqoQ2q6s)
 
-# How to Play
+## How to Play
 
 Before playing Cowchain Farm, make sure you have a **Stellar FUTURENET account**. You can create the account using
 Stellar Laboratory [here](https://laboratory.stellar.org/#account-creator?network=futurenet).
@@ -79,7 +79,7 @@ Stellar Laboratory [here](https://laboratory.stellar.org/#account-creator?networ
 6. The feeding interval plays an essential role in increasing or decreasing your cow's value. As a rule, always feed
    your cow no more than 18 hours after its last meal.
 
-# Cow Feeding Guides
+## Cow Feeding Guides
 
 The cow's hunger level will increase every 6 hours. Here are the levels of cow hunger in Cowchain Farm every 4320
 ledgers since its last feed:
@@ -96,12 +96,12 @@ ledgers since its last feed:
    <br>Cow hungers at its peak feed the cow immediately.<br>Feeding at this level will decrease cow's price
    by <span style="color:red">1%</span>, but the cow will live to see another day.
 
-# License
+## License
 
 The Cowchain Farm is distributed under an MIT license. See the [LICENSE](LICENSE) for more information.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# Contact
+## Contact
 
 [Hasto](https://github.com/hasToDev) - [@HasToDev](https://twitter.com/HasToDev)
