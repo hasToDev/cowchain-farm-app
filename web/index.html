@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <!-- base href should disabled when deploying web app to GitHub pages -->
+  <!--  <base href="$FLUTTER_BASE_HREF">-->
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A Stellar Soroban dApps">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Cowchain Farm">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <!--  <link rel="icon" type="image/png" href="favicon.png"/>-->
+  <link rel="icon" type="image/png" href="favicon-32x32.png"/>
+
+  <title>Cowchain Farm</title>
+  <link rel="manifest" href="manifest.json">
+
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    var serviceWorkerVersion = null;
+  </script>
+  <!-- This script adds the flutter initialization JS code -->
+  <script src="flutter.js" defer></script>
+  <!-- This script adds the Freighter JS code -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-freighter-api/1.6.0/index.min.js" defer></script>
+</head>
+<body style="overflow: hidden" onload="setTimeout(function() {window.scrollTo(0,1)},100)">
+  <!-- Loading indicator -->
+  <div class="loader" id="loading">
+    <style>
+        /* body style to apply background and center loading indicator */
+        body {
+          background-color: #EEF6EE;
+        }
+
+        /* Loading indicator CSS */
+        .loader {
+          width: 62px;
+          height: 62px;
+          border-radius: 50%;
+          border-top: 3.5px solid #333;
+          border-right: 3.5px solid transparent;
+          box-sizing: border-box;
+          animation: rotation 1s linear infinite;
+          /* center CSS box */
+          margin:auto;
+          left:0;
+          right:0;
+          top:0;
+          bottom:0;
+          position:fixed;
+        }
+
+        @keyframes rotation {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+      </style>
+  </div>
+  <script>
+    window.addEventListener('load', function(ev) {
+      // Download main.dart.js
+      var loading = document.querySelector('#loading');
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: function(engineInitializer) {
+          engineInitializer.initializeEngine().then(function(appRunner) {
+            appRunner.runApp();
+          }).then(function (app) {
+            window.setTimeout(function () {
+              loading.remove();
+            }, 200);
+          });
+        }
+      });
+    });
+  </script>
+  <!-- This script adds the JS code that Flutter uses to communicate with Freighter -->
+  <script src="freighter_cow.js"> </script>
+</body>
+</html>
