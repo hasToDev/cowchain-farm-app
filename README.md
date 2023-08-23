@@ -40,8 +40,8 @@ The Cowchain Farm web app in this repository was developed using `Flutter versio
 ## Clone, Run, Build, and Deploy
 
 1. Clone the repository:
-    ```dart
-    git clone https://github.com/hasToDev/cowchain_farm.git
+    ```shell
+    git clone https://github.com/hasToDev/cowchain-farm-app.git
     ```
 
 2. If you wish to deploy your own smart contract version, make sure to change the `Contract ADDRESS` in
