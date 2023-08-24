@@ -32,7 +32,7 @@ class DApps extends StatelessWidget {
         theme: ThemeData(
           scaffoldBackgroundColor: const Color.fromRGBO(238, 246, 238, 1),
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromRGBO(96, 172, 71, 1)),
           splashFactory: InkRipple.splashFactory,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),

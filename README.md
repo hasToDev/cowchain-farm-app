@@ -96,6 +96,15 @@ ledgers since its last feed:
    <br>Cow hungers at its peak feed the cow immediately.<br>Feeding at this level will decrease cow's price
    by <span style="color:red">1%</span>, but the cow will live to see another day.
 
+## Cow Selling Guides
+
+The cows that we have will be able to be sold after they are 3 days old, or the equivalent of 51840 ledgers.
+
+If you try to sell a cow that is still underage, Cowchain Farm contract will not execute the sale and will only provide
+certain information.
+
+Before executing the sale, Cowchain Farm contract will evaluate the cow price and ask you to confirm the selling price.
+
 ## License
 
 The Cowchain Farm is distributed under an MIT license. See the [LICENSE](LICENSE) for more information.
