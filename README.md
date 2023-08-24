@@ -70,6 +70,8 @@ The Cowchain Farm web app in this repository was developed using `Flutter versio
 Before playing Cowchain Farm, make sure you have a **Stellar FUTURENET account**. You can create the account using
 Stellar Laboratory [here](https://laboratory.stellar.org/#account-creator?network=futurenet).
 
+Also make sure you have enabled **Experimental Mode** in the Freighter browser extension.
+
 1. Login to Cowchain Farm with your account using Freighter.
 2. Buy your cow at the market using Stellar native asset (XLM).
 3. Feed cow every 6 hours intervals or equal to 4320 ledgers. <u>If you don't feed the cow within 24 hours, the cow will
