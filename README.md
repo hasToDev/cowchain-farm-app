@@ -72,12 +72,12 @@ Stellar Laboratory [here](https://laboratory.stellar.org/#account-creator?networ
 
 Also make sure you have enabled **Experimental Mode** in the Freighter browser extension.
 
-1. Login to Cowchain Farm with your account using Freighter.
-2. Buy your cow at the market using Stellar native asset (XLM).
+1. Login to Cowchain Farm with your account using Freighter.<br><br>
+2. Buy your cow at the market using Stellar native asset (XLM).<br><br>
 3. Feed cow every 6 hours intervals or equal to 4320 ledgers. <u>If you don't feed the cow within 24 hours, the cow will
-   die.</u>
-4. After your cow reaches 3 days of age or equal to 51840 ledgers, you can start selling it back to the market.
-5. Of course, you can choose to keep feeding the cow. As the cow grows, the price increases (or decreases).
+   die.</u><br><br>
+4. After your cow reaches 3 days of age or equal to 51840 ledgers, you can start selling it back to the market.<br><br>
+5. Of course, you can choose to keep feeding the cow. As the cow grows, the price increases (or decreases).<br><br>
 6. The feeding interval plays an essential role in increasing or decreasing your cow's value. As a rule, always feed
    your cow no more than 18 hours after its last meal.
 
