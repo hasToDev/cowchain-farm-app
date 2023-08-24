@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:cowchain_farm/helpers/js_stub_helper.dart'
     if (dart.library.html) 'package:js/js.dart';
 
-import '../core/models.dart';
-import '../core/type_definitions.dart';
+import '../../core/core.dart';
+import 'freighter_js_interop.dart';
 
 class FreighterHelper {
   FreighterHelper._();
@@ -23,14 +23,14 @@ class FreighterHelper {
       }
     });
     // setup completer
-    _isConnectedCallback = allowInterop((bool output) {
+    isConnectedCallback = allowInterop((bool output) {
       if (!isConnectedCompleter.isCompleted) {
         timerTimeOut.cancel();
         isConnectedCompleter.complete((output, false));
       }
     });
     // call Freighter function
-    _freighterIsConnected();
+    freighterIsConnected();
     // wait for result
     return isConnectedCompleter.future;
   }
@@ -47,14 +47,14 @@ class FreighterHelper {
       }
     });
     // setup completer
-    _isAllowedCallback = allowInterop((bool output) {
+    isAllowedCallback = allowInterop((bool output) {
       if (!isAllowedCompleter.isCompleted) {
         timerTimeOut.cancel();
         isAllowedCompleter.complete((output, false));
       }
     });
     // call Freighter function
-    _freighterIsAllowed();
+    freighterIsAllowed();
     // wait for result
     return isAllowedCompleter.future;
   }
@@ -71,7 +71,7 @@ class FreighterHelper {
       }
     });
     // setup completer
-    _getNetworkDetailsCallback = allowInterop((network, networkUrl, networkPassphrase) {
+    getNetworkDetailsCallback = allowInterop((network, networkUrl, networkPassphrase) {
       if (!getNetworkDetailsCompleter.isCompleted) {
         timerTimeOut.cancel();
 
@@ -84,7 +84,7 @@ class FreighterHelper {
       }
     });
     // call Freighter function
-    _freighterGetNetworkDetails();
+    freighterGetNetworkDetails();
     // wait for result
     return getNetworkDetailsCompleter.future;
   }
@@ -101,14 +101,14 @@ class FreighterHelper {
       }
     });
     // setup completer
-    _getPublicKeyCallback = allowInterop((String output) {
+    getPublicKeyCallback = allowInterop((String output) {
       if (!getPublicKeyCompleter.isCompleted) {
         timerTimeOut.cancel();
         getPublicKeyCompleter.complete((output, false));
       }
     });
     // call Freighter function
-    _freighterGetPublicKey();
+    freighterGetPublicKey();
     // wait for result
     return getPublicKeyCompleter.future;
   }
@@ -125,14 +125,14 @@ class FreighterHelper {
       }
     });
     // setup completer
-    _setAllowedCallback = allowInterop((bool output) {
+    setAllowedCallback = allowInterop((bool output) {
       if (!setAllowedCompleter.isCompleted) {
         timerTimeOut.cancel();
         setAllowedCompleter.complete((output, false));
       }
     });
     // call Freighter function
-    _freighterSetAllowed();
+    freighterSetAllowed();
     // wait for result
     return setAllowedCompleter.future;
   }
@@ -154,75 +154,15 @@ class FreighterHelper {
       }
     });
     // setup completer
-    _signTransactionCallback = allowInterop((String output) {
+    signTransactionCallback = allowInterop((String output) {
       if (!signTransactionCompleter.isCompleted) {
         timerTimeOut.cancel();
         signTransactionCompleter.complete((output, false));
       }
     });
     // call Freighter function
-    _freighterSignTransaction(transactionXDR, network, networkPassphrase, accountToSign);
+    freighterSignTransaction(transactionXDR, network, networkPassphrase, accountToSign);
     // wait for result
     return signTransactionCompleter.future;
   }
 }
-
-/// [_freighterIsConnected] should match js function
-/// [_freighterIsConnected] must be used along with [_isConnectedCallback]
-@JS()
-external dynamic _freighterIsConnected();
-
-/// should match callback name
-@JS('isConnectedCallback')
-external set _isConnectedCallback(void Function(bool output) f);
-
-/// [_freighterIsAllowed] should match js function
-/// [_freighterIsAllowed] must be used along with [_isAllowedCallback]
-@JS()
-external dynamic _freighterIsAllowed();
-
-/// should match callback name
-@JS('isAllowedCallback')
-external set _isAllowedCallback(void Function(bool output) f);
-
-/// [_freighterGetNetworkDetails] should match js function
-/// [_freighterGetNetworkDetails] must be used along with [_getNetworkDetailsCallback]
-@JS()
-external dynamic _freighterGetNetworkDetails();
-
-/// should match callback name
-@JS('getNetworkDetailsCallback')
-external set _getNetworkDetailsCallback(
-    void Function(String network, String networkUrl, String networkPassphrase) f);
-
-/// [_freighterGetPublicKey] should match js function
-/// [_freighterGetPublicKey] must be used along with [_getPublicKeyCallback]
-@JS()
-external dynamic _freighterGetPublicKey();
-
-/// should match callback name
-@JS('getPublicKeyCallback')
-external set _getPublicKeyCallback(void Function(String output) f);
-
-/// [_freighterSetAllowed] should match js function
-/// [_freighterSetAllowed] must be used along with [_setAllowedCallback]
-@JS()
-external dynamic _freighterSetAllowed();
-
-/// should match callback name
-@JS('setAllowedCallback')
-external set _setAllowedCallback(void Function(bool output) f);
-
-/// [_freighterSignTransaction] should match js function
-/// [_freighterSignTransaction] must be used along with [_signTransactionCallback]
-@JS()
-external dynamic _freighterSignTransaction(
-  String transactionXDR,
-  String network,
-  String networkPassphrase,
-  String accountToSign,
-);
-
-/// should match callback name
-@JS('signTransactionCallback')
-external set _signTransactionCallback(void Function(String output) f);

@@ -1,4 +1,9 @@
-async function _freighterIsConnected() {
+// freighter_helper.dart in Flutter uses all the JS code on this file.
+// don't change the function or callback names without adjusting the Flutter code.
+
+// for [FreighterHelper.isConnected]
+//
+async function freighterIsConnected() {
     try {
         var output = await window.freighterApi.isConnected();
         window.isConnectedCallback(output);
@@ -7,7 +12,9 @@ async function _freighterIsConnected() {
     }
 }
 
-async function _freighterIsAllowed() {
+// for [FreighterHelper.isAllowed]
+//
+async function freighterIsAllowed() {
     try {
         var output = await window.freighterApi.isAllowed();
         window.isAllowedCallback(output);
@@ -16,7 +23,9 @@ async function _freighterIsAllowed() {
     }
 }
 
-async function _freighterGetNetworkDetails() {
+// for [FreighterHelper.getNetworkDetails]
+//
+async function freighterGetNetworkDetails() {
     try {
         var output = await window.freighterApi.getNetworkDetails();
         window.getNetworkDetailsCallback(
@@ -29,7 +38,9 @@ async function _freighterGetNetworkDetails() {
     }
 }
 
-async function _freighterGetPublicKey() {
+// for [FreighterHelper.getPublicKey]
+//
+async function freighterGetPublicKey() {
     try {
         var output = await window.freighterApi.getPublicKey();
         window.getPublicKeyCallback(output);
@@ -38,7 +49,9 @@ async function _freighterGetPublicKey() {
     }
 }
 
-async function _freighterSetAllowed() {
+// for [FreighterHelper.setAllowed]
+//
+async function freighterSetAllowed() {
     try {
         var output = await window.freighterApi.setAllowed();
         window.setAllowedCallback(output);
@@ -47,7 +60,9 @@ async function _freighterSetAllowed() {
     }
 }
 
-async function _freighterSignTransaction(
+// for [FreighterHelper.signTransaction]
+//
+async function freighterSignTransaction(
     transactionXDR,
     network,
     networkPassphrase,
