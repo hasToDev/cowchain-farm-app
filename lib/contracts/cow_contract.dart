@@ -109,19 +109,6 @@ class CowContract {
       }
       cowData ??= CowData.zero();
 
-      // debugPrint('status: $status');
-      // debugPrint('ownershipData: $ownershipData');
-      // debugPrint('-------------------------------');
-      // debugPrint('cowId: ${cowData.id}');
-      // debugPrint('cowName: ${cowData.name}');
-      // debugPrint('cowBreed: ${cowData.breed}');
-      // debugPrint('bornLedger: ${cowData.bornLedger}');
-      // debugPrint('lastFedLedger: ${cowData.lastFedLedger}');
-      // debugPrint('onTime: ${cowData.feedingStats.onTime}');
-      // debugPrint('late: ${cowData.feedingStats.late}');
-      // debugPrint('forget: ${cowData.feedingStats.forget}');
-      // debugPrint('-------------------------------');
-
       return (BuyCowResult(status: status, data: cowData, ownership: ownershipData), null);
     }
 
