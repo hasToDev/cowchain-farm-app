@@ -1,4 +1,5 @@
-import 'dart:html' as html;
+import 'package:cowchain_farm/helpers/html_stub_helper.dart' if (dart.library.html) 'dart:html'
+    as html;
 
 import 'package:cowchain_farm/main.dart';
 import 'package:flutter/material.dart';
