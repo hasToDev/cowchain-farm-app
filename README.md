@@ -33,8 +33,7 @@ While the Cowchain Farm web app will cover the following:
 ## Get Started
 
 This article is specifically about the Flutter web app for Cowchain Farm. Discussion of the Cowchain Farm smart contract
-is in a separate repository.
-
+is in the [Cowchain Farm Soroban repository](https://github.com/hasToDev/cowchain-farm-soroban).
 The Cowchain Farm web app in this repository was developed using `Flutter version 3.10.6` and `Dart version 3.0.6`
 
 ## Clone, Run, Build, and Deploy
