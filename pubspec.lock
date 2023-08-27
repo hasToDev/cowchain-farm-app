@@ -288,12 +288,11 @@ packages:
   stellar_flutter_sdk:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "9a3c06e47670f6bff6435721b367d9c55949dd2f"
-      resolved-ref: "9a3c06e47670f6bff6435721b367d9c55949dd2f"
-      url: "https://github.com/Soneso/stellar_flutter_sdk.git"
-    source: git
-    version: "1.6.1"
+      name: stellar_flutter_sdk
+      sha256: "79fcd97bcd90a9807632cf54b1238b2fd7bee2af6447b5ea526ab990b9a02dc2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.2"
   stream_channel:
     dependency: transitive
     description:

@@ -7,9 +7,7 @@ import 'cow_action_buttons.dart';
 import 'hunger_meter.dart';
 import 'sub_info_cow_card.dart';
 
-// TODO: change cowLifeTimeWithoutFeed to 17280. value 240 only for Demo.
-// const int cowLifeTimeWithoutFeed = 17280;
-const int cowLifeTimeWithoutFeed = 240;
+const int cowLifeTimeWithoutFeed = 17280;
 
 class CowCard extends StatelessWidget {
   const CowCard({
