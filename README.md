@@ -51,9 +51,9 @@ The Cowchain Farm web app in this repository was developed using `Flutter versio
     ```dart
     flutter pub get
     ```
-4. Run on local browser (**web-port** is optional):
+4. Run on local browser (**web-port** is optional between 0-65535):
     ```dart
-    flutter run --web-renderer canvaskit -d web-server --web-port 88888
+    flutter run --web-renderer canvaskit -d web-server --web-port 45454
     ```
 5. Generate the release build:
     ```dart
