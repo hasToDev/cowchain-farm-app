@@ -335,47 +335,47 @@ class CowContract {
     );
     InvokeHostFunctionOperation functionOperation = InvokeHostFuncOpBuilder(hostFunction).build();
 
-    // Submit Transaction
-    var (GetTransactionResponse? txResponse, FormatException? error) = await SorobanHelper.submitTx(
-      server: server,
-      operation: functionOperation,
-      account: account,
-      useAuth: true,
-    );
-    if (error != null) return (GetAllCowResult.zero(), error.message);
+    // Build Transaction
+    Transaction transaction = TransactionBuilder(account).addOperation(functionOperation).build();
+
+    // ! Get data from Soroban contract using SimulateTransactionResponse / Preflight
+    // ! This way we can retrieve user data without paying for the transaction fee.
+    // Simulate Transaction
+    SimulateTransactionResponse simulateResponse = await server.simulateTransaction(transaction);
+    if (simulateResponse.resultError?.contains('Error') ?? false) {
+      if (server.enableLogging) {
+        debugPrint('simulateResponse Error: ${simulateResponse.jsonResponse['result']['error']}');
+      }
+      return (GetAllCowResult.zero(), AppMessages.tryAgain);
+    }
+
+    // Retrieve Simulate Transaction Result XDR
+    List<SimulateTransactionResult> preflightResult = simulateResponse.results ?? [];
+    if (preflightResult.isEmpty) return (GetAllCowResult.zero(), AppMessages.notFound);
 
     // Process Response
-    txResponse = txResponse as GetTransactionResponse;
-    if (server.enableLogging) {
-      debugPrint('Transaction Response status: ${txResponse.status}');
+    XdrSCVal? resVal = preflightResult.first.resultValue;
+    if (resVal == null || resVal.map == null) {
+      return (GetAllCowResult.zero(), AppMessages.noResult);
     }
 
-    if (txResponse.status == GetTransactionResponse.STATUS_SUCCESS) {
-      XdrSCVal? resVal = txResponse.getResultValue();
-      if (resVal == null || resVal.map == null) {
-        return (GetAllCowResult.zero(), AppMessages.noResult);
+    Status status = Status.fail;
+    List<CowData> cowData = [];
+
+    for (XdrSCMapEntry v in resVal.map!) {
+      if (v.key.sym == null) continue;
+      if (v.key.sym == 'status' && v.val.vec != null) {
+        status = (v.val.vec?.first.sym ?? '').getStatus();
       }
-
-      Status status = Status.fail;
-      List<CowData> cowData = [];
-
-      for (XdrSCMapEntry v in resVal.map!) {
-        if (v.key.sym == null) continue;
-        if (v.key.sym == 'status' && v.val.vec != null) {
-          status = (v.val.vec?.first.sym ?? '').getStatus();
-        }
-        if (v.key.sym == 'data' && v.val.vec != null) {
-          for (XdrSCVal data in v.val.vec!) {
-            CowData cow = await getCowData(data.map!);
-            cowData.add(cow);
-          }
+      if (v.key.sym == 'data' && v.val.vec != null) {
+        for (XdrSCVal data in v.val.vec!) {
+          CowData cow = await getCowData(data.map!);
+          cowData.add(cow);
         }
       }
-
-      return (GetAllCowResult(status: status, data: cowData), null);
     }
 
-    return (GetAllCowResult.zero(), AppMessages.processFails);
+    return (GetAllCowResult(status: status, data: cowData), null);
   }
 }
 
