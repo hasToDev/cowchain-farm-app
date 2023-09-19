@@ -15,7 +15,7 @@ class CowContract {
 
   /// Contract ADDRESS
   static ContractADDRESS contractADDRESS =
-      "CBGWRIUE4ELMDQM7HVQGD4ZBRI4AMA6Y64UQ55NZKX572KVQAXDNWNK4";
+      "CCWNHURJIYTUJ3AOTJ2VF36XH7E5RIA2EKZKGD22O5B4GG2CQE3FCAHV";
 
   /// Contract ID
   static ContractID getContractID() => StrKey.decodeContractIdHex(contractADDRESS);
