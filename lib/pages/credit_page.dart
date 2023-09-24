@@ -65,12 +65,12 @@ class _CreditPageState extends State<CreditPage> {
                                   double maxWidth = constraints.maxWidth;
                                   double leftPad = 0;
                                   double rightPad = 0;
-                                  if (maxWidth >= 534) {
-                                    leftPad = maxWidth - 534;
-                                  } else if (maxWidth >= 326 && maxWidth < 534) {
-                                    rightPad = maxWidth - 326;
-                                  } else if (maxWidth >= 186 && maxWidth < 326) {
-                                    rightPad = maxWidth - 186;
+                                  if (maxWidth >= 540) {
+                                    leftPad = maxWidth - 540;
+                                  } else if (maxWidth >= 332 && maxWidth < 540) {
+                                    rightPad = maxWidth - 332;
+                                  } else if (maxWidth >= 192 && maxWidth < 332) {
+                                    rightPad = maxWidth - 192;
                                   }
                                   return Padding(
                                     padding: EdgeInsets.only(
@@ -135,22 +135,48 @@ class _CreditPageState extends State<CreditPage> {
   // Contains list of Navigation button for credit page.
   List<Widget> barActionButtons(BuildContext context) {
     return [
-      Padding(
+      Container(
+        width: 146,
         padding: const EdgeInsets.only(right: 24),
-        child: AppButton(
+        child: AppGradientButton(
           title: 'back to FARM',
-          backgroundColor: const Color.fromRGBO(255, 123, 0, 1),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.1, 0.35, 0.5, 0.65, 0.9],
+            colors: [
+              Color.fromRGBO(255, 162, 76, 1),
+              Color.fromRGBO(255, 123, 0, 1),
+              Color.fromRGBO(255, 123, 0, 1),
+              Color.fromRGBO(255, 123, 0, 1),
+              Color.fromRGBO(255, 162, 76, 1),
+            ],
+          ),
           onTap: () async {
             context.go('/farm');
           },
         ),
       ),
-      AppButton(
-        title: 'back to MARKET',
-        backgroundColor: const Color.fromRGBO(2, 117, 216, 1),
-        onTap: () async {
-          context.go('/market');
-        },
+      SizedBox(
+        width: 146,
+        child: AppGradientButton(
+          title: 'back to MARKET',
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.1, 0.35, 0.5, 0.65, 0.9],
+            colors: [
+              Color.fromRGBO(77, 158, 227, 1),
+              Color.fromRGBO(2, 117, 216, 1),
+              Color.fromRGBO(2, 117, 216, 1),
+              Color.fromRGBO(2, 117, 216, 1),
+              Color.fromRGBO(77, 158, 227, 1),
+            ],
+          ),
+          onTap: () async {
+            context.go('/market');
+          },
+        ),
       ),
     ];
   }
