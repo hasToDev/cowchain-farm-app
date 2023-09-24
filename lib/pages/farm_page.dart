@@ -60,14 +60,14 @@ class _FarmPageState extends State<FarmPage> {
                                   double maxWidth = constraints.maxWidth;
                                   double leftPad = 0;
                                   double rightPad = 0;
-                                  if (maxWidth >= 572) {
-                                    leftPad = maxWidth - 572;
-                                  } else if (maxWidth >= 382 && maxWidth < 572) {
-                                    rightPad = maxWidth - 382;
-                                  } else if (maxWidth >= 296 && maxWidth < 382) {
-                                    rightPad = maxWidth - 296;
-                                  } else if (maxWidth >= 190 && maxWidth < 296) {
-                                    rightPad = maxWidth - 190;
+                                  if (maxWidth >= 574) {
+                                    leftPad = maxWidth - 574;
+                                  } else if (maxWidth >= 384 && maxWidth < 574) {
+                                    rightPad = maxWidth - 384;
+                                  } else if (maxWidth >= 298 && maxWidth < 384) {
+                                    rightPad = maxWidth - 298;
+                                  } else if (maxWidth >= 192 && maxWidth < 298) {
+                                    rightPad = maxWidth - 192;
                                   }
                                   return Padding(
                                     padding: EdgeInsets.only(
@@ -159,31 +159,69 @@ class _FarmPageState extends State<FarmPage> {
   // Contains list of Navigation button for farm page.
   List<Widget> barActionButtons(BuildContext context) {
     return [
-      Padding(
+      Container(
+        width: 150,
         padding: const EdgeInsets.only(right: 24),
-        child: AppButton(
+        child: AppGradientButton(
           title: 'go to MARKET',
-          backgroundColor: const Color.fromRGBO(255, 123, 0, 1),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.1, 0.35, 0.5, 0.65, 0.9],
+            colors: [
+              Color.fromRGBO(255, 162, 76, 1),
+              Color.fromRGBO(255, 123, 0, 1),
+              Color.fromRGBO(255, 123, 0, 1),
+              Color.fromRGBO(255, 123, 0, 1),
+              Color.fromRGBO(255, 162, 76, 1),
+            ],
+          ),
           onTap: () async {
             context.go('/market');
           },
         ),
       ),
-      Padding(
+      Container(
+        width: 106,
         padding: const EdgeInsets.only(right: 24),
-        child: AppButton(
+        child: AppGradientButton(
           title: 'CREDIT',
-          backgroundColor: const Color.fromRGBO(2, 117, 216, 1),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.1, 0.35, 0.5, 0.65, 0.9],
+            colors: [
+              Color.fromRGBO(77, 158, 227, 1),
+              Color.fromRGBO(2, 117, 216, 1),
+              Color.fromRGBO(2, 117, 216, 1),
+              Color.fromRGBO(2, 117, 216, 1),
+              Color.fromRGBO(77, 158, 227, 1),
+            ],
+          ),
           onTap: () async => context.go('/credit'),
         ),
       ),
-      AppButton(
-        title: 'LOGOUT',
-        backgroundColor: Colors.red,
-        onTap: () async {
-          context.read<CowProvider>().userLoggedOut();
-          context.go('/login');
-        },
+      SizedBox(
+        width: 88,
+        child: AppGradientButton(
+          title: 'LOGOUT',
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.1, 0.35, 0.5, 0.65, 0.9],
+            colors: [
+              Color.fromRGBO(247, 123, 114, 1),
+              Color.fromRGBO(244, 67, 54, 1),
+              Color.fromRGBO(244, 67, 54, 1),
+              Color.fromRGBO(244, 67, 54, 1),
+              Color.fromRGBO(247, 123, 114, 1),
+            ],
+          ),
+          onTap: () async {
+            context.read<CowProvider>().userLoggedOut();
+            context.go('/login');
+          },
+        ),
       ),
     ];
   }
