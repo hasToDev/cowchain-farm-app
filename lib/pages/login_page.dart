@@ -78,10 +78,23 @@ class _LoginPageState extends State<LoginPage> {
                       return SizedBox(
                         height: 36,
                         width: 100,
-                        child: AppButton(
+                        child: AppGradientButton(
                           title: 'Login',
                           bigger: true,
-                          backgroundColor: const Color.fromRGBO(112, 180, 89, 1),
+                          elevation: 12,
+                          shadowColor: const Color.fromRGBO(100, 162, 80, 1),
+                          gradient: const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            stops: [0.1, 0.4, 0.5, 0.6, 0.9],
+                            colors: [
+                              Color.fromRGBO(157, 204, 142, 1),
+                              Color.fromRGBO(100, 162, 80, 1),
+                              Color.fromRGBO(100, 162, 80, 1),
+                              Color.fromRGBO(100, 162, 80, 1),
+                              Color.fromRGBO(157, 204, 142, 1),
+                            ],
+                          ),
                           onTap: () async {
                             if (loading) return;
                             loading = true;
