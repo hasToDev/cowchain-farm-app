@@ -66,12 +66,12 @@ class _MarketPageState extends State<MarketPage> {
                                   double maxWidth = constraints.maxWidth;
                                   double leftPad = 0;
                                   double rightPad = 0;
-                                  if (maxWidth >= 600) {
-                                    leftPad = maxWidth - 600;
-                                  } else if (maxWidth >= 378 && maxWidth < 600) {
-                                    rightPad = maxWidth - 378;
-                                  } else if (maxWidth >= 232 && maxWidth < 378) {
-                                    rightPad = maxWidth - 232;
+                                  if (maxWidth >= 608) {
+                                    leftPad = maxWidth - 608;
+                                  } else if (maxWidth >= 386 && maxWidth < 608) {
+                                    rightPad = maxWidth - 386;
+                                  } else if (maxWidth >= 240 && maxWidth < 386) {
+                                    rightPad = maxWidth - 240;
                                   }
                                   return Padding(
                                     padding: EdgeInsets.only(
@@ -122,31 +122,69 @@ class _MarketPageState extends State<MarketPage> {
   // Contains list of Navigation button for market page.
   List<Widget> barActionButtons(BuildContext context) {
     return [
-      Padding(
+      Container(
+        width: 150,
         padding: const EdgeInsets.only(right: 24),
-        child: AppButton(
+        child: AppGradientButton(
           title: 'back to FARM',
-          backgroundColor: const Color.fromRGBO(255, 123, 0, 1),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.1, 0.35, 0.5, 0.65, 0.9],
+            colors: [
+              Color.fromRGBO(255, 162, 76, 1),
+              Color.fromRGBO(255, 123, 0, 1),
+              Color.fromRGBO(255, 123, 0, 1),
+              Color.fromRGBO(255, 123, 0, 1),
+              Color.fromRGBO(255, 162, 76, 1),
+            ],
+          ),
           onTap: () async {
             context.go('/farm');
           },
         ),
       ),
-      Padding(
+      Container(
+        width: 106,
         padding: const EdgeInsets.only(right: 24),
-        child: AppButton(
+        child: AppGradientButton(
           title: 'CREDIT',
-          backgroundColor: const Color.fromRGBO(2, 117, 216, 1),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.1, 0.35, 0.5, 0.65, 0.9],
+            colors: [
+              Color.fromRGBO(77, 158, 227, 1),
+              Color.fromRGBO(2, 117, 216, 1),
+              Color.fromRGBO(2, 117, 216, 1),
+              Color.fromRGBO(2, 117, 216, 1),
+              Color.fromRGBO(77, 158, 227, 1),
+            ],
+          ),
           onTap: () async => context.go('/credit'),
         ),
       ),
-      AppButton(
-        title: 'LOGOUT',
-        backgroundColor: Colors.red,
-        onTap: () async {
-          context.read<CowProvider>().userLoggedOut();
-          context.go('/login');
-        },
+      SizedBox(
+        width: 88,
+        child: AppGradientButton(
+          title: 'LOGOUT',
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.1, 0.35, 0.5, 0.65, 0.9],
+            colors: [
+              Color.fromRGBO(247, 123, 114, 1),
+              Color.fromRGBO(244, 67, 54, 1),
+              Color.fromRGBO(244, 67, 54, 1),
+              Color.fromRGBO(244, 67, 54, 1),
+              Color.fromRGBO(247, 123, 114, 1),
+            ],
+          ),
+          onTap: () async {
+            context.read<CowProvider>().userLoggedOut();
+            context.go('/login');
+          },
+        ),
       ),
     ];
   }
