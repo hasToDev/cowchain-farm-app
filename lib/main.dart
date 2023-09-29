@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'core/providers.dart';
+import 'core/providers/providers.dart';
 import 'pages/pages.dart';
 
 export 'contracts/contracts.dart';
