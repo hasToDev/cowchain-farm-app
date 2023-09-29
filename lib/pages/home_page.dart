@@ -1,4 +1,7 @@
+import 'dart:io' show Platform;
+
 import 'package:cowchain_farm/main.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -23,9 +26,16 @@ class _HomePageState extends State<HomePage> {
   void check() async {
     await Future.delayed(const Duration(milliseconds: 2500));
     if (context.mounted) {
-      bool? loggedIn = context.read<CowProvider>().isLoggedIn;
-      if (!loggedIn) return context.go('/login');
-      if (loggedIn) return context.go('/farm');
+      if (kIsWeb || Platform.isWindows) {
+        bool? loggedIn = context.read<CowProvider>().isLoggedIn;
+        if (!loggedIn) return context.go('/login');
+        if (loggedIn) return context.go('/farm');
+      } else if (Platform.isAndroid || Platform.isIOS) {
+        bool? loggedIn = context.read<NotificationProvider>().isLoggedIn;
+        if (!loggedIn) return context.go('/register-notification');
+        // TODO: create a notification page
+        // if (loggedIn) return context.go('/notification');
+      }
     }
   }
 

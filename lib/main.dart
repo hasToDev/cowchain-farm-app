@@ -1,5 +1,9 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nested/nested.dart';
 import 'package:provider/provider.dart';
 
 import 'core/providers/providers.dart';
@@ -20,12 +24,19 @@ class DApps extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<SingleChildWidget> providerList = [];
+    if (kIsWeb || Platform.isWindows) {
+      providerList.add(ChangeNotifierProvider<CowProvider>(
+        create: (_) => CowProvider(),
+      ));
+    } else if (Platform.isAndroid || Platform.isIOS) {
+      providerList.add(ChangeNotifierProvider<NotificationProvider>(
+        create: (_) => NotificationProvider(),
+      ));
+    }
+
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<CowProvider>(
-          create: (_) => CowProvider(),
-        ),
-      ],
+      providers: providerList,
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'Cowchain Farm',
@@ -74,6 +85,12 @@ class DApps extends StatelessWidget {
           return customTransitionPage(state, const CreditPage());
         },
       ),
+      GoRoute(
+        path: "/register-notification",
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return customTransitionPage(state, const RegisterNotificationPage());
+        },
+      ),
     ],
     errorPageBuilder: (BuildContext context, GoRouterState state) {
       return customTransitionPage(state, const HomePage());
@@ -81,12 +98,19 @@ class DApps extends StatelessWidget {
     redirect: (BuildContext context, GoRouterState state) async {
       String navPath = state.fullPath ?? '/';
 
-      // * check for LOGIN status
-      bool? loggedIn = context.read<CowProvider>().isLoggedIn;
-      if (!loggedIn && navPath != '/' && navPath != '/login') return '/login';
+      // * check for LOGIN status based on Platform
+      if (kIsWeb || Platform.isWindows) {
+        bool? loggedIn = context.read<CowProvider>().isLoggedIn;
+        if (!loggedIn && navPath != '/' && navPath != '/login') return '/login';
 
-      // * redirect to FARM if user already LOGIN
-      if (loggedIn && navPath == '/login') return '/farm';
+        // * redirect to FARM if user already LOGIN
+        if (loggedIn && navPath == '/login') return '/farm';
+      } else if (Platform.isAndroid || Platform.isIOS) {
+        bool? loggedIn = context.read<NotificationProvider>().isLoggedIn;
+        if (!loggedIn && navPath != '/' && navPath != '/register-notification') {
+          return '/register-notification';
+        }
+      }
 
       return null;
     },
