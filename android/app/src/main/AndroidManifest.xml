@@ -1,6 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="dev.hasto.cowchain_farm">
+    <uses-permission
+        android:name="android.permission.INTERNET"/>
     <application
-        android:label="cowchain_farm"
+        android:label="Cowchain Farm"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
