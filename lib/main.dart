@@ -20,7 +20,11 @@ void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   if (!kIsWeb) {
     if (Platform.isAndroid || Platform.isIOS) {
+      // Flutter Native splash setup
       FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+      // OneSignal setup
+      OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+      OneSignal.initialize("4a5afd7e-a6da-4945-ab58-277404c8874b");
     }
   }
   runApp(DApps());
