@@ -4,7 +4,6 @@ import 'package:cowchain_farm/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +23,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     if (!kIsWeb) {
       if (Platform.isAndroid || Platform.isIOS) {
-        FlutterNativeSplash.remove();
         OneSignal.Notifications.requestPermission(true);
       }
     }
