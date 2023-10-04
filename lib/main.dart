@@ -2,10 +2,12 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nested/nested.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/providers/providers.dart';
 import 'pages/pages.dart';
@@ -15,10 +17,14 @@ export 'core/core.dart';
 export 'helpers/helpers.dart';
 export 'widgets/widgets.dart';
 
+const String storedStellarAccountID = 'StellarAccountID';
+
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   if (!kIsWeb) {
     if (Platform.isAndroid || Platform.isIOS) {
+      // Flutter Native Splash Setup
+      FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
       // OneSignal setup
       OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
       OneSignal.initialize("4a5afd7e-a6da-4945-ab58-277404c8874b");
@@ -99,6 +105,12 @@ class DApps extends StatelessWidget {
           return customTransitionPage(state, const RegisterNotificationPage());
         },
       ),
+      GoRoute(
+        path: "/notification",
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return customTransitionPage(state, const NotificationPage());
+        },
+      ),
     ],
     errorPageBuilder: (BuildContext context, GoRouterState state) {
       return customTransitionPage(state, const HomePage());
@@ -114,10 +126,16 @@ class DApps extends StatelessWidget {
         // * redirect to FARM if user already LOGIN
         if (loggedIn && navPath == '/login') return '/farm';
       } else if (Platform.isAndroid || Platform.isIOS) {
-        bool? loggedIn = context.read<NotificationProvider>().isLoggedIn;
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        String? publicKey = prefs.getString(storedStellarAccountID);
+
+        bool? loggedIn = publicKey != null && publicKey != '';
         if (!loggedIn && navPath != '/' && navPath != '/register-notification') {
           return '/register-notification';
         }
+
+        // * redirect to NOTIFICATION if user already LOGIN
+        if (loggedIn && navPath == '/register-notification') return '/notification';
       }
 
       return null;

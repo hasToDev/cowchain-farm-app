@@ -4,9 +4,11 @@ import 'package:cowchain_farm/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +25,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     if (!kIsWeb) {
       if (Platform.isAndroid || Platform.isIOS) {
+        FlutterNativeSplash.remove();
         OneSignal.Notifications.requestPermission(true);
       }
     }
@@ -38,10 +41,14 @@ class _HomePageState extends State<HomePage> {
         if (!loggedIn) return context.go('/login');
         if (loggedIn) return context.go('/farm');
       } else if (Platform.isAndroid || Platform.isIOS) {
-        bool? loggedIn = context.read<NotificationProvider>().isLoggedIn;
-        if (!loggedIn) return context.go('/register-notification');
-        // TODO: create a notification page
-        // if (loggedIn) return context.go('/notification');
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        String? publicKey = prefs.getString(storedStellarAccountID);
+
+        bool? loggedIn = publicKey != null && publicKey != '';
+        if (context.mounted) {
+          if (!loggedIn) return context.go('/register-notification');
+          if (loggedIn) return context.go('/notification');
+        }
       }
     }
   }

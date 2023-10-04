@@ -20,4 +20,7 @@ class AppMessages {
   static String timeoutFreighter = 'Freighter timeout. Please try again.';
   static String tryAgain = 'Something went wrong. Please try again.';
   static String underageCow = 'Your cow is still under 3 days of age.';
+  static String publicKeyEmpty = 'Please provide Public Key to register.';
+  static String publicKeyInvalid = 'Public Key invalid. Please try again.';
+  static String oneSignalIdNotAvailable = 'Please try again in a moment or restart the app.';
 }

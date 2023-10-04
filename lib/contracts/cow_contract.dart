@@ -10,12 +10,11 @@ class CowContract {
   static StellarSDK sdk = StellarSDK.FUTURENET;
 
   /// Soroban Server
-  static SorobanServer server = SorobanServer('https://rpc-futurenet.stellar.org:443')
-    ..acknowledgeExperimental = true;
+  static SorobanServer server = SorobanServer('https://rpc-futurenet.stellar.org:443');
 
   /// Contract ADDRESS
   static ContractADDRESS contractADDRESS =
-      "CCWNHURJIYTUJ3AOTJ2VF36XH7E5RIA2EKZKGD22O5B4GG2CQE3FCAHV";
+      "CALZXQICGW7E6N5TXBTP423OEG37M2KRUU5HG2EYIUU365A6VZA4HLXJ";
 
   /// Contract ID
   static ContractID getContractID() => StrKey.decodeContractIdHex(contractADDRESS);
