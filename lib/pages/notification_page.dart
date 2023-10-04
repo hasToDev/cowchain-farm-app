@@ -96,7 +96,7 @@ class _NotificationPageState extends State<NotificationPage> {
                           ],
                         );
                         Size textSize = MeasurementUtil.measureWidget(
-                            SizedBox(width: containerSize, child: listeningDescription));
+                            SizedBox(width: constraints.maxWidth, child: listeningDescription));
 
                         return SizedBox(
                           height: textSize.height + 8,
@@ -126,7 +126,7 @@ class _NotificationPageState extends State<NotificationPage> {
                           ],
                         );
                         Size textSize = MeasurementUtil.measureWidget(
-                            SizedBox(width: containerSize, child: listeningForAccountID));
+                            SizedBox(width: constraints.maxWidth, child: listeningForAccountID));
 
                         return SizedBox(
                           height: textSize.height + 8,
