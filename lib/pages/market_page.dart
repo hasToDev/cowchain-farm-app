@@ -256,7 +256,7 @@ class _MarketPageState extends State<MarketPage> {
 
     // Update cow data and go to Farm.
     if (context.mounted) {
-      context.read<CowProvider>().addCow(result.data);
+      context.read<CowProvider>().addCow(result.data.first);
       context.read<CowProvider>().updateOwnership(result.ownership);
       context.go('/farm');
     }

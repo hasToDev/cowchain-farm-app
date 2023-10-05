@@ -1,5 +1,4 @@
 import 'package:cowchain_farm/main.dart';
-import 'package:fixnum/fixnum.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
 
@@ -87,28 +86,8 @@ class CowContract {
     if (txResponse.status == GetTransactionResponse.STATUS_SUCCESS) {
       XdrSCVal? resVal = txResponse.getResultValue();
       if (resVal == null || resVal.map == null) return (BuyCowResult.zero(), AppMessages.noResult);
-
-      Status status = Status.fail;
-      CowData? cowData;
-      List<String> ownershipData = [];
-
-      for (XdrSCMapEntry v in resVal.map!) {
-        if (v.key.sym == null) continue;
-        if (v.key.sym == 'status' && v.val.vec != null) {
-          status = (v.val.vec?.first.sym ?? '').getStatus();
-        }
-        if (v.key.sym == 'cow_data' && v.val.map != null) {
-          cowData = await getCowData(v.val.map!);
-        }
-        if (v.key.sym == 'ownership' && v.val.vec != null) {
-          for (XdrSCVal data in v.val.vec!) {
-            ownershipData.add(data.str.toString());
-          }
-        }
-      }
-      cowData ??= CowData.zero();
-
-      return (BuyCowResult(status: status, data: cowData, ownership: ownershipData), null);
+      BuyCowResult buyCowResult = await CowHelper.parseResult(CowFunction.buyCow, resVal);
+      return (buyCowResult, null);
     }
 
     return (BuyCowResult.zero(), AppMessages.processFails);
@@ -157,23 +136,8 @@ class CowContract {
     if (txResponse.status == GetTransactionResponse.STATUS_SUCCESS) {
       XdrSCVal? resVal = txResponse.getResultValue();
       if (resVal == null || resVal.map == null) return (SellCowResult.zero(), AppMessages.noResult);
-
-      Status status = Status.fail;
-      List<String> ownershipData = [];
-
-      for (XdrSCMapEntry v in resVal.map!) {
-        if (v.key.sym == null) continue;
-        if (v.key.sym == 'status' && v.val.vec != null) {
-          status = (v.val.vec?.first.sym ?? '').getStatus();
-        }
-        if (v.key.sym == 'ownership' && v.val.vec != null) {
-          for (XdrSCVal data in v.val.vec!) {
-            ownershipData.add(data.str.toString());
-          }
-        }
-      }
-
-      return (SellCowResult(status: status, ownership: ownershipData), null);
+      SellCowResult sellCowResult = await CowHelper.parseResult(CowFunction.sellCow, resVal);
+      return (sellCowResult, null);
     }
 
     return (SellCowResult.zero(), AppMessages.processFails);
@@ -223,24 +187,9 @@ class CowContract {
       if (resVal == null || resVal.map == null) {
         return (CowAppraisalResult.zero(), AppMessages.noResult);
       }
-
-      Status status = Status.fail;
-      String price = '';
-
-      for (XdrSCMapEntry v in resVal.map!) {
-        if (v.key.sym == null) continue;
-        if (v.key.sym == 'status' && v.val.vec != null) {
-          status = (v.val.vec?.first.sym ?? '').getStatus();
-        }
-        if (v.key.sym == 'price' && v.val.i128 != null) {
-          int high = v.val.i128?.hi.int64 ?? 0;
-          int low = v.val.i128?.lo.uint64 ?? 0;
-          Int64 price64 = (Int64(1000000000) * Int64(high)) + Int64(low);
-          price = (price64 ~/ Int64(10000000)).toString();
-        }
-      }
-
-      return (CowAppraisalResult(status: status, price: price), null);
+      CowAppraisalResult cowAppraisalResult =
+          await CowHelper.parseResult(CowFunction.cowAppraisal, resVal);
+      return (cowAppraisalResult, null);
     }
 
     return (CowAppraisalResult.zero(), AppMessages.processFails);
@@ -291,21 +240,9 @@ class CowContract {
       if (resVal == null || resVal.map == null) {
         return (FeedTheCowResult.zero(), AppMessages.noResult);
       }
-
-      Status status = Status.fail;
-      int lastFedLedger = 0;
-
-      for (XdrSCMapEntry v in resVal.map!) {
-        if (v.key.sym == null) continue;
-        if (v.key.sym == 'status' && v.val.vec != null) {
-          status = (v.val.vec?.first.sym ?? '').getStatus();
-        }
-        if (v.key.sym == 'ledger' && v.val.u32 != null) {
-          lastFedLedger = v.val.u32?.uint32 ?? 0;
-        }
-      }
-
-      return (FeedTheCowResult(status: status, lastFedLedger: lastFedLedger), null);
+      FeedTheCowResult feedTheCowResult =
+          await CowHelper.parseResult(CowFunction.feedTheCow, resVal);
+      return (feedTheCowResult, null);
     }
 
     return (FeedTheCowResult.zero(), AppMessages.processFails);
@@ -357,47 +294,7 @@ class CowContract {
     if (resVal == null || resVal.map == null) {
       return (GetAllCowResult.zero(), AppMessages.noResult);
     }
-
-    Status status = Status.fail;
-    List<CowData> cowData = [];
-
-    for (XdrSCMapEntry v in resVal.map!) {
-      if (v.key.sym == null) continue;
-      if (v.key.sym == 'status' && v.val.vec != null) {
-        status = (v.val.vec?.first.sym ?? '').getStatus();
-      }
-      if (v.key.sym == 'data' && v.val.vec != null) {
-        for (XdrSCVal data in v.val.vec!) {
-          CowData cow = await getCowData(data.map!);
-          cowData.add(cow);
-        }
-      }
-    }
-
-    return (GetAllCowResult(status: status, data: cowData), null);
+    GetAllCowResult getAllCowResult = await CowHelper.parseResult(CowFunction.getAllCow, resVal);
+    return (getAllCowResult, null);
   }
-}
-
-/// [getCowData]
-/// parse CowData object from Cowchain Farm Soroban contract
-Future<CowData> getCowData(List<XdrSCMapEntry> mapEntries) async {
-  CowData cow = CowData.zero();
-  for (XdrSCMapEntry e in mapEntries) {
-    if (e.key.sym == null) continue;
-    if (e.key.sym == 'id') cow.cowId = e.val.str.toString();
-    if (e.key.sym == 'name') cow.cowName = e.val.sym.toString();
-    if (e.key.sym == 'breed') cow.breed = (e.val.u32?.uint32 ?? 0).getCowBreed();
-    if (e.key.sym == 'born_ledger') cow.cowBornLedger = e.val.u32?.uint32 ?? 0;
-    if (e.key.sym == 'last_fed_ledger') cow.cowLastFedLedger = e.val.u32?.uint32 ?? 0;
-    if (e.key.sym == 'feeding_stats' && e.val.map != null) {
-      CowFeedingStats cowStats = CowFeedingStats.zero();
-      for (XdrSCMapEntry stats in e.val.map!) {
-        if (stats.key.sym == 'on_time') cowStats.onTime = stats.val.u32?.uint32 ?? 0;
-        if (stats.key.sym == 'late') cowStats.statsLate = stats.val.u32?.uint32 ?? 0;
-        if (stats.key.sym == 'forget') cowStats.statsForget = stats.val.u32?.uint32 ?? 0;
-      }
-      cow.feedingStats = cowStats;
-    }
-  }
-  return cow;
 }

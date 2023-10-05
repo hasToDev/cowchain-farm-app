@@ -22,32 +22,40 @@ class CowData {
     required this.id,
     required this.name,
     required this.breed,
+    required this.gender,
     required this.bornLedger,
     required this.lastFedLedger,
     required this.feedingStats,
+    required this.auctionId,
   });
 
   late String id;
   late String name;
   late CowBreed breed;
+  late CowGender gender;
   late int bornLedger;
   late int lastFedLedger;
   late CowFeedingStats feedingStats;
+  late String auctionId;
 
   set cowId(String id) => this.id = id;
   set cowName(String name) => this.name = name;
   set cowBreed(CowBreed breed) => this.breed = breed;
+  set cowGender(CowGender gender) => this.gender = gender;
   set cowBornLedger(int bornLedger) => this.bornLedger = bornLedger;
   set cowLastFedLedger(int lastFedLedger) => this.lastFedLedger = lastFedLedger;
   set cowFeedingStats(CowFeedingStats feedingStats) => this.feedingStats = feedingStats;
+  set cowAuctionId(String auctionId) => this.auctionId = auctionId;
 
   static CowData zero() => CowData(
         id: '',
         name: '',
         breed: 0.getCowBreed(),
+        gender: 0.getCowGender(),
         bornLedger: 0,
         lastFedLedger: 0,
         feedingStats: CowFeedingStats.zero(),
+        auctionId: '',
       );
 }
 
@@ -81,11 +89,10 @@ class BuyCowResult {
   });
 
   final Status status;
-  final CowData data;
+  final List<CowData> data;
   final List<String> ownership;
 
-  static BuyCowResult zero() =>
-      BuyCowResult(status: Status.fail, data: CowData.zero(), ownership: []);
+  static BuyCowResult zero() => const BuyCowResult(status: Status.fail, data: [], ownership: []);
 }
 
 /// [SellCowResult]

@@ -21,6 +21,17 @@ extension CowBreedIntX on int {
   }
 }
 
+extension CowGenderIntX on int {
+  /// [getCowGender] retrieve CowGender based on int value
+  CowGender getCowGender() {
+    return switch (this) {
+      1 => CowGender.male,
+      2 => CowGender.female,
+      _ => CowGender.male,
+    };
+  }
+}
+
 extension CowBreedStringX on CowBreed {
   /// [name] retrieve CowBreed string value
   String name() {
@@ -78,6 +89,11 @@ extension StatusX on String {
       'Underage' => Status.underage,
       'MissingOwnership' => Status.missingOwnership,
       'FullStomach' => Status.fullStomach,
+      'OnAuction' => Status.onAuction,
+      'BidIsClosed' => Status.bidIsClosed,
+      'BidIsOpen' => Status.bidIsOpen,
+      'CannotBidLower' => Status.cannotBidLower,
+      'NameAlreadyExist' => Status.nameAlreadyExist,
       _ => Status.fail,
     };
   }
