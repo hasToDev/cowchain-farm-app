@@ -163,6 +163,10 @@ class CowCard extends StatelessWidget {
                                   DateTime age =
                                       DateTime.now().subtract(Duration(seconds: cowAge * 5));
                                   String ageStr = GetTimeAgo.parse(age);
+                                  if (!ageStr.contains('ago')) {
+                                    Duration now = DateTime.now().difference(age);
+                                    ageStr = '${now.inDays} days';
+                                  }
                                   ageStr = ageStr.replaceAll('ago', '').trim();
                                   return SubInfoCowCard(
                                     title: 'Age',
