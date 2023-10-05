@@ -112,13 +112,28 @@ class CowHelper {
           return GetAllCowResult(status: status, data: cowData);
         }
       case CowchainFunction.registerAuction:
-      // TODO: Handle this case.
       case CowchainFunction.bidding:
-      // TODO: Handle this case.
       case CowchainFunction.finalizeAuction:
-      // TODO: Handle this case.
       case CowchainFunction.getAllAuction:
-      // TODO: Handle this case.
+        {
+          Status status = Status.fail;
+          List<AuctionData> auctionData = [];
+
+          for (XdrSCMapEntry v in resultValue.map!) {
+            if (v.key.sym == null) continue;
+            if (v.key.sym == 'status' && v.val.vec != null) {
+              status = (v.val.vec?.first.sym ?? '').getStatus();
+            }
+            if (v.key.sym == 'auction_data' && v.val.vec != null) {
+              for (XdrSCVal data in v.val.vec!) {
+                AuctionData auction = await getAuctionData(data.map!);
+                auctionData.add(auction);
+              }
+            }
+          }
+
+          return AuctionResult(status: status, auctionData: auctionData);
+        }
     }
   }
 
@@ -130,8 +145,8 @@ class CowHelper {
       if (e.key.sym == null) continue;
       if (e.key.sym == 'id') cow.cowId = e.val.str.toString();
       if (e.key.sym == 'name') cow.cowName = e.val.sym.toString();
-      if (e.key.sym == 'breed') cow.breed = (e.val.u32?.uint32 ?? 0).getCowBreed();
-      if (e.key.sym == 'gender') cow.gender = (e.val.u32?.uint32 ?? 0).getCowGender();
+      if (e.key.sym == 'breed') cow.cowBreed = (e.val.u32?.uint32 ?? 0).getCowBreed();
+      if (e.key.sym == 'gender') cow.cowGender = (e.val.u32?.uint32 ?? 0).getCowGender();
       if (e.key.sym == 'born_ledger') cow.cowBornLedger = e.val.u32?.uint32 ?? 0;
       if (e.key.sym == 'last_fed_ledger') cow.cowLastFedLedger = e.val.u32?.uint32 ?? 0;
       if (e.key.sym == 'feeding_stats' && e.val.map != null) {
@@ -141,10 +156,69 @@ class CowHelper {
           if (stats.key.sym == 'late') cowStats.statsLate = stats.val.u32?.uint32 ?? 0;
           if (stats.key.sym == 'forget') cowStats.statsForget = stats.val.u32?.uint32 ?? 0;
         }
-        cow.feedingStats = cowStats;
+        cow.cowFeedingStats = cowStats;
       }
-      if (e.key.sym == 'auction_id') cow.auctionId = e.val.str.toString();
+      if (e.key.sym == 'auction_id') cow.cowAuctionId = e.val.str.toString();
     }
     return cow;
+  }
+
+  /// [getAuctionData]
+  /// parse AuctionData object from Cowchain Farm Soroban contract
+  static Future<AuctionData> getAuctionData(List<XdrSCMapEntry> mapEntries) async {
+    AuctionData auction = AuctionData.zero();
+    for (XdrSCMapEntry e in mapEntries) {
+      if (e.key.sym == null) continue;
+      if (e.key.sym == 'auction_id') auction.cowAuctionId = e.val.str.toString();
+      if (e.key.sym == 'cow_id') auction.cowId = e.val.str.toString();
+      if (e.key.sym == 'cow_name') auction.cowName = e.val.sym.toString();
+      if (e.key.sym == 'cow_breed') auction.cowBreed = (e.val.u32?.uint32 ?? 0).getCowBreed();
+      if (e.key.sym == 'cow_gender') auction.cowGender = (e.val.u32?.uint32 ?? 0).getCowGender();
+      if (e.key.sym == 'cow_born_ledger') auction.cowBornLedger = e.val.u32?.uint32 ?? 0;
+      if (e.key.sym == 'owner' && e.val.address != null) {
+        auction.cowOwner = Address.fromXdr(e.val.address!);
+      }
+      if (e.key.sym == 'start_price' && e.val.i128 != null) {
+        int high = e.val.i128?.hi.int64 ?? 0;
+        int low = e.val.i128?.lo.uint64 ?? 0;
+        Int64 price64 = (Int64(1000000000) * Int64(high)) + Int64(low);
+        String price = (price64 ~/ Int64(10000000)).toString();
+        if (price.isNotEmpty) auction.cowAuctionStartPrice = price;
+      }
+      if (e.key.sym == 'highest_bidder' && e.val.map != null) {
+        auction.cowHighestBidder = await getBidder(e.val.map!);
+      }
+      if (e.key.sym == 'bid_history' && e.val.vec != null) {
+        List<Bidder> bidHistory = [];
+        for (XdrSCVal data in e.val.vec!) {
+          Bidder bidder = await getBidder(data.map!);
+          bidHistory.add(bidder);
+        }
+        auction.cowBidHistory = bidHistory;
+      }
+      if (e.key.sym == 'auction_limit_ledger') {
+        auction.cowAuctionLimitLedger = e.val.u32?.uint32 ?? 0;
+      }
+    }
+    return auction;
+  }
+
+  /// [getBidder]
+  /// parse Bidder object from Cowchain Farm Soroban contract
+  static Future<Bidder> getBidder(List<XdrSCMapEntry> mapEntries) async {
+    Bidder bidder = Bidder.zero();
+    for (XdrSCMapEntry e in mapEntries) {
+      if (e.key.sym == 'user' && e.val.address != null) {
+        bidder.cowUser = Address.fromXdr(e.val.address!);
+      }
+      if (e.key.sym == 'price' && e.val.i128 != null) {
+        int high = e.val.i128?.hi.int64 ?? 0;
+        int low = e.val.i128?.lo.uint64 ?? 0;
+        Int64 price64 = (Int64(1000000000) * Int64(high)) + Int64(low);
+        String price = (price64 ~/ Int64(10000000)).toString();
+        if (price.isNotEmpty) bidder.cowPrice = price;
+      }
+    }
+    return bidder;
   }
 }

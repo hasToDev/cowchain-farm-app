@@ -302,4 +302,209 @@ class CowContract {
         await CowHelper.parseResult(CowchainFunction.getAllCow, resVal);
     return (getAllCowResult, null);
   }
+
+  /// [invokeRegisterAuction]
+  /// call register_auction function on Cowchain Farm Soroban contract
+  static Future<(AuctionResult, String?)> invokeRegisterAuction({
+    required String accountID,
+    required String cowID,
+    required String auctionID,
+    required int price,
+  }) async {
+    const CowchainFunction function = CowchainFunction.registerAuction;
+
+    // Retrieve Account Information
+    AccountResponse account = await sdk.accounts.account(accountID);
+
+    // ! The arguments ORDER must be EXACTLY the SAME as the order of Soroban Function Arguments
+    List<XdrSCVal> arguments = [
+      XdrSCVal.forAccountAddress(accountID),
+      XdrSCVal.forString(cowID),
+      XdrSCVal.forString(auctionID),
+      XdrSCVal.forU32(price),
+    ];
+
+    // Build Operation
+    InvokeContractHostFunction hostFunction = InvokeContractHostFunction(
+      getContractID(),
+      function.name(),
+      arguments: arguments,
+    );
+    InvokeHostFunctionOperation functionOperation = InvokeHostFuncOpBuilder(hostFunction).build();
+
+    // Submit Transaction
+    var (GetTransactionResponse? txResponse, FormatException? error) = await SorobanHelper.submitTx(
+      server: server,
+      operation: functionOperation,
+      account: account,
+      function: function,
+      useAuth: true,
+    );
+    if (error != null) return (AuctionResult.zero(), error.message);
+
+    // Process Response
+    txResponse = txResponse as GetTransactionResponse;
+    if (server.enableLogging) {
+      debugPrint('Transaction Response status: ${txResponse.status}');
+    }
+
+    if (txResponse.status == GetTransactionResponse.STATUS_SUCCESS) {
+      XdrSCVal? resVal = txResponse.getResultValue();
+      if (resVal == null || resVal.map == null) return (AuctionResult.zero(), AppMessages.noResult);
+      AuctionResult auctionResult =
+          await CowHelper.parseResult(CowchainFunction.registerAuction, resVal);
+      return (auctionResult, null);
+    }
+
+    return (AuctionResult.zero(), AppMessages.processFails);
+  }
+
+  /// [invokeBidding]
+  /// call bidding function on Cowchain Farm Soroban contract
+  static Future<(AuctionResult, String?)> invokeBidding({
+    required String accountID,
+    required String auctionID,
+    required int bidPrice,
+  }) async {
+    const CowchainFunction function = CowchainFunction.bidding;
+
+    // Retrieve Account Information
+    AccountResponse account = await sdk.accounts.account(accountID);
+
+    // ! The arguments ORDER must be EXACTLY the SAME as the order of Soroban Function Arguments
+    List<XdrSCVal> arguments = [
+      XdrSCVal.forAccountAddress(accountID),
+      XdrSCVal.forString(auctionID),
+      XdrSCVal.forU32(bidPrice),
+    ];
+
+    // Build Operation
+    InvokeContractHostFunction hostFunction = InvokeContractHostFunction(
+      getContractID(),
+      function.name(),
+      arguments: arguments,
+    );
+    InvokeHostFunctionOperation functionOperation = InvokeHostFuncOpBuilder(hostFunction).build();
+
+    // Submit Transaction
+    var (GetTransactionResponse? txResponse, FormatException? error) = await SorobanHelper.submitTx(
+      server: server,
+      operation: functionOperation,
+      account: account,
+      function: function,
+      useAuth: true,
+    );
+    if (error != null) return (AuctionResult.zero(), error.message);
+
+    // Process Response
+    txResponse = txResponse as GetTransactionResponse;
+    if (server.enableLogging) {
+      debugPrint('Transaction Response status: ${txResponse.status}');
+    }
+
+    if (txResponse.status == GetTransactionResponse.STATUS_SUCCESS) {
+      XdrSCVal? resVal = txResponse.getResultValue();
+      if (resVal == null || resVal.map == null) return (AuctionResult.zero(), AppMessages.noResult);
+      AuctionResult auctionResult = await CowHelper.parseResult(CowchainFunction.bidding, resVal);
+      return (auctionResult, null);
+    }
+
+    return (AuctionResult.zero(), AppMessages.processFails);
+  }
+
+  /// [invokeFinalizeAuction]
+  /// call finalize_auction function on Cowchain Farm Soroban contract
+  static Future<(AuctionResult, String?)> invokeFinalizeAuction({
+    required String accountID,
+    required String auctionID,
+  }) async {
+    const CowchainFunction function = CowchainFunction.finalizeAuction;
+
+    // Retrieve Account Information
+    AccountResponse account = await sdk.accounts.account(accountID);
+
+    // ! The arguments ORDER must be EXACTLY the SAME as the order of Soroban Function Arguments
+    List<XdrSCVal> arguments = [
+      XdrSCVal.forString(auctionID),
+    ];
+
+    // Build Operation
+    InvokeContractHostFunction hostFunction = InvokeContractHostFunction(
+      getContractID(),
+      function.name(),
+      arguments: arguments,
+    );
+    InvokeHostFunctionOperation functionOperation = InvokeHostFuncOpBuilder(hostFunction).build();
+
+    // Submit Transaction
+    var (GetTransactionResponse? txResponse, FormatException? error) = await SorobanHelper.submitTx(
+      server: server,
+      operation: functionOperation,
+      account: account,
+      function: function,
+      useAuth: true,
+    );
+    if (error != null) return (AuctionResult.zero(), error.message);
+
+    // Process Response
+    txResponse = txResponse as GetTransactionResponse;
+    if (server.enableLogging) {
+      debugPrint('Transaction Response status: ${txResponse.status}');
+    }
+
+    if (txResponse.status == GetTransactionResponse.STATUS_SUCCESS) {
+      XdrSCVal? resVal = txResponse.getResultValue();
+      if (resVal == null || resVal.map == null) return (AuctionResult.zero(), AppMessages.noResult);
+      AuctionResult auctionResult =
+          await CowHelper.parseResult(CowchainFunction.finalizeAuction, resVal);
+      return (auctionResult, null);
+    }
+
+    return (AuctionResult.zero(), AppMessages.processFails);
+  }
+
+  /// [invokeGetAllAuction]
+  /// call get_all_auction function on Cowchain Farm Soroban contract
+  static Future<(AuctionResult, String?)> invokeGetAllAuction({
+    required String accountID,
+  }) async {
+    const CowchainFunction function = CowchainFunction.getAllAuction;
+
+    // Retrieve Account Information
+    AccountResponse account = await sdk.accounts.account(accountID);
+
+    // Build Operation
+    InvokeContractHostFunction hostFunction = InvokeContractHostFunction(
+      getContractID(),
+      function.name(),
+    );
+    InvokeHostFunctionOperation functionOperation = InvokeHostFuncOpBuilder(hostFunction).build();
+
+    // Build Transaction
+    Transaction transaction = TransactionBuilder(account).addOperation(functionOperation).build();
+
+    // ! Get data from Soroban contract using SimulateTransactionResponse / Preflight
+    // ! This way we can retrieve user data without paying for the transaction fee.
+    // Simulate Transaction
+    SimulateTransactionResponse simulateResponse = await server.simulateTransaction(transaction);
+    if (simulateResponse.resultError?.contains('Error') ?? false) {
+      if (server.enableLogging) {
+        debugPrint('simulateResponse Error: ${simulateResponse.jsonResponse['result']['error']}');
+      }
+      return (AuctionResult.zero(), AppMessages.tryAgain);
+    }
+
+    // Retrieve Simulate Transaction Result XDR
+    List<SimulateTransactionResult> preflightResult = simulateResponse.results ?? [];
+    if (preflightResult.isEmpty) return (AuctionResult.zero(), AppMessages.notFound);
+
+    // Process Response
+    XdrSCVal? resVal = preflightResult.first.resultValue;
+    if (resVal == null || resVal.map == null) {
+      return (AuctionResult.zero(), AppMessages.noResult);
+    }
+    AuctionResult auctionResult =
+        await CowHelper.parseResult(CowchainFunction.getAllAuction, resVal);
+    return (auctionResult, null);
+  }
 }

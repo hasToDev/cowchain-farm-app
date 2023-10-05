@@ -63,13 +63,16 @@ class SorobanHelper {
       case CowchainFunction.getAllCow:
         preStatus = Status.ok; // do nothing, will only give empty result
       case CowchainFunction.registerAuction:
-      // TODO: Handle this case.
+        {
+          preStatus = (preParse as AuctionResult).status;
+          if (preStatus == Status.notFound) preErrorMessage = AppMessages.cowNotFound;
+        }
       case CowchainFunction.bidding:
-      // TODO: Handle this case.
+        preStatus = (preParse as AuctionResult).status;
       case CowchainFunction.finalizeAuction:
-      // TODO: Handle this case.
+        preStatus = (preParse as AuctionResult).status;
       case CowchainFunction.getAllAuction:
-      // TODO: Handle this case.
+        preStatus = Status.ok; // do nothing, will only give empty result
     }
 
     // Return error if preflight status not OK

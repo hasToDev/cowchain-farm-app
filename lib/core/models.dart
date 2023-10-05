@@ -1,3 +1,5 @@
+import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart' show Address;
+
 import 'enums.dart';
 import 'extensions.dart';
 
@@ -149,4 +151,94 @@ class FeedTheCowResult {
   final int lastFedLedger;
 
   static FeedTheCowResult zero() => const FeedTheCowResult(status: Status.fail, lastFedLedger: 0);
+}
+
+/// [AuctionResult]
+/// Result for auction related function from Cowchain Farm Soroban contract
+class AuctionResult {
+  const AuctionResult({
+    required this.status,
+    required this.auctionData,
+  });
+
+  final Status status;
+  final List<AuctionData> auctionData;
+
+  static AuctionResult zero() => const AuctionResult(status: Status.fail, auctionData: []);
+}
+
+/// [AuctionData]
+/// Auction Data object from Cowchain Farm Soroban contract
+class AuctionData {
+  AuctionData({
+    required this.auctionId,
+    required this.id,
+    required this.name,
+    required this.breed,
+    required this.gender,
+    required this.bornLedger,
+    required this.owner,
+    required this.startPrice,
+    required this.highestBidder,
+    required this.bidHistory,
+    required this.auctionLimitLedger,
+  });
+
+  late String auctionId;
+  late String id;
+  late String name;
+  late CowBreed breed;
+  late CowGender gender;
+  late int bornLedger;
+  late Address owner;
+  late String startPrice;
+  late Bidder highestBidder;
+  late List<Bidder> bidHistory;
+  late int auctionLimitLedger;
+
+  set cowAuctionId(String auctionId) => this.auctionId = auctionId;
+  set cowId(String id) => this.id = id;
+  set cowName(String name) => this.name = name;
+  set cowBreed(CowBreed breed) => this.breed = breed;
+  set cowGender(CowGender gender) => this.gender = gender;
+  set cowBornLedger(int bornLedger) => this.bornLedger = bornLedger;
+  set cowOwner(Address owner) => this.owner = owner;
+  set cowAuctionStartPrice(String startPrice) => this.startPrice = startPrice;
+  set cowHighestBidder(Bidder highestBidder) => this.highestBidder = highestBidder;
+  set cowBidHistory(List<Bidder> bidHistory) => this.bidHistory = bidHistory;
+  set cowAuctionLimitLedger(int auctionLimitLedger) => this.auctionLimitLedger = auctionLimitLedger;
+
+  static AuctionData zero() => AuctionData(
+        auctionId: '',
+        id: '',
+        name: '',
+        breed: 0.getCowBreed(),
+        gender: 0.getCowGender(),
+        bornLedger: 0,
+        owner: Address.forAccountId('GABNRFNSC4HBH4Y3CB4SHQGMPMJAQRBGEO4U42B63S26QOB6FTMMEBQU'),
+        startPrice: '0',
+        highestBidder: Bidder.zero(),
+        bidHistory: [],
+        auctionLimitLedger: 0,
+      );
+}
+
+/// [Bidder]
+/// Bidder object from Cowchain Farm Soroban contract
+class Bidder {
+  Bidder({
+    required this.user,
+    required this.price,
+  });
+
+  late Address user;
+  late String price;
+
+  set cowUser(Address user) => this.user = user;
+  set cowPrice(String price) => this.price = price;
+
+  static Bidder zero() => Bidder(
+        user: Address.forAccountId('GABNRFNSC4HBH4Y3CB4SHQGMPMJAQRBGEO4U42B63S26QOB6FTMMEBQU'),
+        price: '',
+      );
 }
