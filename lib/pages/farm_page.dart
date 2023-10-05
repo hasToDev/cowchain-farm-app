@@ -243,10 +243,6 @@ class _FarmPageState extends State<FarmPage> {
 
     // Call dialog if error exist.
     String? errorMessage = errorAppraisal;
-    if (appraisal.status != Status.ok) {
-      // Check for specific error status returned from contract.
-      if (appraisal.status == Status.notFound) errorMessage = AppMessages.cowNotFound;
-    }
     if (errorMessage != null && context.mounted) {
       DialogHelper.failures(context, errorMessage);
       return;
@@ -273,16 +269,6 @@ class _FarmPageState extends State<FarmPage> {
 
     // Call dialog if error exist.
     errorMessage = error;
-    if (result.status != Status.ok) {
-      // Check for specific error status returned from contract.
-      if (result.status == Status.notInitialized) errorMessage = AppMessages.contractNotInitialized;
-      if (result.status == Status.notFound) errorMessage = AppMessages.cowNotFound;
-      if (result.status == Status.missingOwnership) errorMessage = AppMessages.cowNotFound;
-      if (result.status == Status.underage) errorMessage = AppMessages.underageCow;
-      if (result.status == Status.insufficientFund) {
-        errorMessage = AppMessages.insufficientMarketFund;
-      }
-    }
     if (errorMessage != null && context.mounted) {
       DialogHelper.failures(context, errorMessage);
       return;
@@ -312,12 +298,6 @@ class _FarmPageState extends State<FarmPage> {
 
     // Call dialog if error exist.
     String? errorMessage = error;
-    if (result.status != Status.ok) {
-      // Check for specific error status returned from contract.
-      if (result.status == Status.notFound) errorMessage = AppMessages.cowNotFound;
-      if (result.status == Status.missingOwnership) errorMessage = AppMessages.cowNotFound;
-      if (result.status == Status.fullStomach) errorMessage = AppMessages.cowStillFull;
-    }
     if (errorMessage != null && context.mounted) {
       DialogHelper.failures(context, errorMessage);
       return;

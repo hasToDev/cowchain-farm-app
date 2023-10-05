@@ -37,6 +37,8 @@ class CowContract {
     required String cowID,
     required CowBreed cowBreed,
   }) async {
+    const CowchainFunction function = CowchainFunction.buyCow;
+
     // Retrieve Cow Breed ID based on its Breed
     int cowBreedID = switch (cowBreed) {
       CowBreed.jersey => 1,
@@ -61,7 +63,7 @@ class CowContract {
     // Build Operation
     InvokeContractHostFunction hostFunction = InvokeContractHostFunction(
       getContractID(),
-      CowchainFunction.buyCow.name(),
+      function.name(),
       arguments: arguments,
     );
     InvokeHostFunctionOperation functionOperation = InvokeHostFuncOpBuilder(hostFunction).build();
@@ -71,6 +73,7 @@ class CowContract {
       server: server,
       operation: functionOperation,
       account: account,
+      function: function,
       useAuth: true,
     );
     if (error != null) return (BuyCowResult.zero(), error.message);
@@ -97,6 +100,8 @@ class CowContract {
     required String accountID,
     required String cowID,
   }) async {
+    const CowchainFunction function = CowchainFunction.sellCow;
+
     // Retrieve Account Information
     AccountResponse account = await sdk.accounts.account(accountID);
 
@@ -109,7 +114,7 @@ class CowContract {
     // Build Operation
     InvokeContractHostFunction hostFunction = InvokeContractHostFunction(
       getContractID(),
-      CowchainFunction.sellCow.name(),
+      function.name(),
       arguments: arguments,
     );
     InvokeHostFunctionOperation functionOperation = InvokeHostFuncOpBuilder(hostFunction).build();
@@ -119,6 +124,7 @@ class CowContract {
       server: server,
       operation: functionOperation,
       account: account,
+      function: function,
       useAuth: true,
     );
     if (error != null) return (SellCowResult.zero(), error.message);
@@ -145,6 +151,8 @@ class CowContract {
     required String accountID,
     required String cowID,
   }) async {
+    const CowchainFunction function = CowchainFunction.cowAppraisal;
+
     // Retrieve Account Information
     AccountResponse account = await sdk.accounts.account(accountID);
 
@@ -156,7 +164,7 @@ class CowContract {
     // Build Operation
     InvokeContractHostFunction hostFunction = InvokeContractHostFunction(
       getContractID(),
-      CowchainFunction.cowAppraisal.name(),
+      function.name(),
       arguments: arguments,
     );
     InvokeHostFunctionOperation functionOperation = InvokeHostFuncOpBuilder(hostFunction).build();
@@ -166,6 +174,7 @@ class CowContract {
       server: server,
       operation: functionOperation,
       account: account,
+      function: function,
       useAuth: false,
     );
     if (error != null) return (CowAppraisalResult.zero(), error.message);
@@ -195,6 +204,8 @@ class CowContract {
     required String accountID,
     required String cowID,
   }) async {
+    const CowchainFunction function = CowchainFunction.feedTheCow;
+
     // Retrieve Account Information
     AccountResponse account = await sdk.accounts.account(accountID);
 
@@ -207,7 +218,7 @@ class CowContract {
     // Build Operation
     InvokeContractHostFunction hostFunction = InvokeContractHostFunction(
       getContractID(),
-      CowchainFunction.feedTheCow.name(),
+      function.name(),
       arguments: arguments,
     );
     InvokeHostFunctionOperation functionOperation = InvokeHostFuncOpBuilder(hostFunction).build();
@@ -217,6 +228,7 @@ class CowContract {
       server: server,
       operation: functionOperation,
       account: account,
+      function: function,
       useAuth: false,
     );
     if (error != null) return (FeedTheCowResult.zero(), error.message);
@@ -245,6 +257,8 @@ class CowContract {
   static Future<(GetAllCowResult, String?)> invokeGetAllCow({
     required String accountID,
   }) async {
+    const CowchainFunction function = CowchainFunction.getAllCow;
+
     // Retrieve Account Information
     AccountResponse account = await sdk.accounts.account(accountID);
 
@@ -256,7 +270,7 @@ class CowContract {
     // Build Operation
     InvokeContractHostFunction hostFunction = InvokeContractHostFunction(
       getContractID(),
-      CowchainFunction.getAllCow.name(),
+      function.name(),
       arguments: arguments,
     );
     InvokeHostFunctionOperation functionOperation = InvokeHostFuncOpBuilder(hostFunction).build();

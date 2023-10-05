@@ -244,11 +244,6 @@ class _MarketPageState extends State<MarketPage> {
 
     // Call dialog if error exist.
     String? errorMessage = error;
-    if (result.status != Status.ok) {
-      // Check for specific error status returned from contract.
-      if (result.status == Status.notInitialized) errorMessage = AppMessages.contractNotInitialized;
-      if (result.status == Status.insufficientFund) errorMessage = AppMessages.insufficientFund;
-    }
     if (errorMessage != null && context.mounted) {
       DialogHelper.failures(context, errorMessage);
       return;

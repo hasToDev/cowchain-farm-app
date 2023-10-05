@@ -2,8 +2,8 @@ import 'package:cowchain_farm/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
 
-const String futureNetwork = 'FUTURENET';
-const String futurePassphrase = 'Test SDF Future Network ; October 2022';
+const String testNetwork = 'TESTNET';
+const String testPassphrase = 'Test SDF Network ; September 2015';
 
 class SorobanHelper {
   SorobanHelper._();
@@ -12,6 +12,7 @@ class SorobanHelper {
     required SorobanServer server,
     required InvokeHostFunctionOperation operation,
     required AccountResponse account,
+    required CowchainFunction function,
     required bool useAuth,
     KeyPair? keypair,
   }) async {
@@ -27,6 +28,57 @@ class SorobanHelper {
       return (null, FormatException(AppMessages.tryAgain));
     }
 
+    // Retrieve Simulate Transaction Result XDR
+    List<SimulateTransactionResult> preflightResult = simulateResponse.results ?? [];
+    if (preflightResult.isEmpty) return (null, FormatException(AppMessages.tryAgain));
+
+    // Process Preflight Result
+    XdrSCVal? resultValue = preflightResult.first.resultValue;
+    if (resultValue == null) return (null, FormatException(AppMessages.tryAgainPreflight));
+    dynamic preParse = await CowHelper.parseResult(function, resultValue);
+    Status preStatus = Status.ok;
+    String preErrorMessage = '';
+
+    switch (function) {
+      case CowchainFunction.buyCow:
+        preStatus = (preParse as BuyCowResult).status;
+      case CowchainFunction.sellCow:
+        {
+          preStatus = (preParse as SellCowResult).status;
+          if (preStatus == Status.notFound) preErrorMessage = AppMessages.cowNotFound;
+          if (preStatus == Status.insufficientFund) {
+            preErrorMessage = AppMessages.insufficientMarketFund;
+          }
+        }
+      case CowchainFunction.cowAppraisal:
+        {
+          preStatus = (preParse as CowAppraisalResult).status;
+          if (preStatus == Status.notFound) preErrorMessage = AppMessages.cowNotFound;
+        }
+      case CowchainFunction.feedTheCow:
+        {
+          preStatus = (preParse as FeedTheCowResult).status;
+          if (preStatus == Status.notFound) preErrorMessage = AppMessages.cowNotFound;
+        }
+      case CowchainFunction.getAllCow:
+        preStatus = Status.ok; // do nothing, will only give empty result
+      case CowchainFunction.registerAuction:
+      // TODO: Handle this case.
+      case CowchainFunction.bidding:
+      // TODO: Handle this case.
+      case CowchainFunction.finalizeAuction:
+      // TODO: Handle this case.
+      case CowchainFunction.getAllAuction:
+      // TODO: Handle this case.
+    }
+
+    // Return error if preflight status not OK
+    if (preStatus != Status.ok) {
+      if (preErrorMessage.isEmpty) preErrorMessage = preStatus.message();
+      return (null, FormatException(preErrorMessage));
+    }
+
+    // Continue to Sign
     transaction.addResourceFee((simulateResponse.minResourceFee ?? 440000000) * 2);
     transaction.sorobanTransactionData = simulateResponse.transactionData;
     if (useAuth) transaction.setSorobanAuth(simulateResponse.sorobanAuth);
@@ -35,7 +87,7 @@ class SorobanHelper {
       // Sign Transaction using Freighter
       var (List<XdrDecoratedSignature>? signatures, FreighterError? error) =
           await requestAuthFromFreighter(
-              transaction: transaction, accountIDToSign: account.accountId, isFutureNet: true);
+              transaction: transaction, accountIDToSign: account.accountId, isTestNet: true);
       if (error != null) return _freighterErrorHandler(error);
       transaction.signatures = signatures!;
     } else {
@@ -59,7 +111,7 @@ class SorobanHelper {
   static Future<(List<XdrDecoratedSignature>?, FreighterError?)> requestAuthFromFreighter({
     required Transaction transaction,
     required String accountIDToSign,
-    required bool isFutureNet,
+    required bool isTestNet,
   }) async {
     // * is Freighter Connected
     var (bool? isConnected, FreighterTimeout isConnectedTimeout) =
@@ -90,9 +142,9 @@ class SorobanHelper {
     String network = getNetworkDetails!.network;
     String networkPassphrase = getNetworkDetails.networkPassphrase;
 
-    if (isFutureNet) {
-      if (network != futureNetwork) network = futureNetwork;
-      if (networkPassphrase != futurePassphrase) networkPassphrase = futurePassphrase;
+    if (isTestNet) {
+      if (network != testNetwork) network = testNetwork;
+      if (networkPassphrase != testPassphrase) networkPassphrase = testPassphrase;
     }
 
     // * sign transaction with Freighter

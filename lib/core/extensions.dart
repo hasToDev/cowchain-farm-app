@@ -1,3 +1,4 @@
+import 'package:cowchain_farm/core/app_messages.dart';
 import 'package:flutter/material.dart';
 import 'enums.dart';
 
@@ -112,6 +113,34 @@ extension CowFunctionStringX on CowchainFunction {
       CowchainFunction.bidding => 'bidding',
       CowchainFunction.finalizeAuction => 'finalize_auction',
       CowchainFunction.getAllAuction => 'get_all_auction',
+    };
+  }
+}
+
+extension StatusMessageX on Status {
+  /// [name] retrieve CowBreed string value
+  String message() {
+    return switch (this) {
+      Status.ok => '',
+      Status.fail => '',
+      Status.alreadyInitialized => '',
+      Status.notInitialized => AppMessages.contractNotInitialized,
+      Status.tryAgain => '',
+      Status.notFound => AppMessages.notFound,
+      Status.found => '',
+      Status.saved => '',
+      Status.bumped => '',
+      Status.upgraded => '',
+      Status.duplicate => '',
+      Status.insufficientFund => AppMessages.insufficientFund,
+      Status.underage => AppMessages.underageCow,
+      Status.missingOwnership => AppMessages.cowNotFound,
+      Status.fullStomach => AppMessages.cowStillFull,
+      Status.onAuction => AppMessages.cowOnAuction,
+      Status.bidIsClosed => AppMessages.unableToBid,
+      Status.bidIsOpen => AppMessages.unableToFinalize,
+      Status.cannotBidLower => AppMessages.mustBidHigher,
+      Status.nameAlreadyExist => AppMessages.nameExist,
     };
   }
 }
