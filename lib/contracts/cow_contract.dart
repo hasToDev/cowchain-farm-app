@@ -7,10 +7,10 @@ class CowContract {
   CowContract._();
 
   /// Stellar SDK
-  static StellarSDK sdk = StellarSDK.FUTURENET;
+  static StellarSDK sdk = StellarSDK.TESTNET;
 
   /// Soroban Server
-  static SorobanServer server = SorobanServer('https://rpc-futurenet.stellar.org:443');
+  static SorobanServer server = SorobanServer('https://soroban-testnet.stellar.org:443');
 
   /// Contract ADDRESS
   static ContractADDRESS contractADDRESS =
