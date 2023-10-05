@@ -93,7 +93,7 @@ class SorobanHelper {
     } else {
       // Sign Transaction using Keypair
       if (keypair == null) return (null, FormatException(AppMessages.provideSecretKey));
-      transaction.sign(keypair, Network.FUTURENET);
+      transaction.sign(keypair, Network.TESTNET);
     }
 
     // Send Transaction
