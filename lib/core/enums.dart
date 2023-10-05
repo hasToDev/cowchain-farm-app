@@ -38,7 +38,7 @@ enum Status {
   nameAlreadyExist,
 }
 
-enum CowFunction {
+enum CowchainFunction {
   buyCow,
   sellCow,
   cowAppraisal,

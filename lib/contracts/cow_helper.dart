@@ -7,9 +7,9 @@ class CowHelper {
 
   /// [parseResult]
   /// parse result value from Cowchain Farm Soroban contract
-  static Future<dynamic> parseResult(CowFunction function, XdrSCVal resultValue) async {
+  static Future<dynamic> parseResult(CowchainFunction function, XdrSCVal resultValue) async {
     switch (function) {
-      case CowFunction.buyCow:
+      case CowchainFunction.buyCow:
         {
           Status status = Status.fail;
           List<CowData> cowData = [];
@@ -35,7 +35,7 @@ class CowHelper {
 
           return BuyCowResult(status: status, data: cowData, ownership: ownershipData);
         }
-      case CowFunction.sellCow:
+      case CowchainFunction.sellCow:
         {
           Status status = Status.fail;
           List<String> ownershipData = [];
@@ -54,7 +54,7 @@ class CowHelper {
 
           return SellCowResult(status: status, ownership: ownershipData);
         }
-      case CowFunction.cowAppraisal:
+      case CowchainFunction.cowAppraisal:
         {
           Status status = Status.fail;
           String price = '';
@@ -74,7 +74,7 @@ class CowHelper {
 
           return CowAppraisalResult(status: status, price: price);
         }
-      case CowFunction.feedTheCow:
+      case CowchainFunction.feedTheCow:
         {
           Status status = Status.fail;
           int lastFedLedger = 0;
@@ -91,7 +91,7 @@ class CowHelper {
 
           return FeedTheCowResult(status: status, lastFedLedger: lastFedLedger);
         }
-      case CowFunction.getAllCow:
+      case CowchainFunction.getAllCow:
         {
           Status status = Status.fail;
           List<CowData> cowData = [];
@@ -111,13 +111,13 @@ class CowHelper {
 
           return GetAllCowResult(status: status, data: cowData);
         }
-      case CowFunction.registerAuction:
+      case CowchainFunction.registerAuction:
       // TODO: Handle this case.
-      case CowFunction.bidding:
+      case CowchainFunction.bidding:
       // TODO: Handle this case.
-      case CowFunction.finalizeAuction:
+      case CowchainFunction.finalizeAuction:
       // TODO: Handle this case.
-      case CowFunction.getAllAuction:
+      case CowchainFunction.getAllAuction:
       // TODO: Handle this case.
     }
   }

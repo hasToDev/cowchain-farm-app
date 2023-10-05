@@ -37,8 +37,6 @@ class CowContract {
     required String cowID,
     required CowBreed cowBreed,
   }) async {
-    String functionName = "buy_cow";
-
     // Retrieve Cow Breed ID based on its Breed
     int cowBreedID = switch (cowBreed) {
       CowBreed.jersey => 1,
@@ -63,7 +61,7 @@ class CowContract {
     // Build Operation
     InvokeContractHostFunction hostFunction = InvokeContractHostFunction(
       getContractID(),
-      functionName,
+      CowchainFunction.buyCow.name(),
       arguments: arguments,
     );
     InvokeHostFunctionOperation functionOperation = InvokeHostFuncOpBuilder(hostFunction).build();
@@ -86,7 +84,7 @@ class CowContract {
     if (txResponse.status == GetTransactionResponse.STATUS_SUCCESS) {
       XdrSCVal? resVal = txResponse.getResultValue();
       if (resVal == null || resVal.map == null) return (BuyCowResult.zero(), AppMessages.noResult);
-      BuyCowResult buyCowResult = await CowHelper.parseResult(CowFunction.buyCow, resVal);
+      BuyCowResult buyCowResult = await CowHelper.parseResult(CowchainFunction.buyCow, resVal);
       return (buyCowResult, null);
     }
 
@@ -99,8 +97,6 @@ class CowContract {
     required String accountID,
     required String cowID,
   }) async {
-    String functionName = "sell_cow";
-
     // Retrieve Account Information
     AccountResponse account = await sdk.accounts.account(accountID);
 
@@ -113,7 +109,7 @@ class CowContract {
     // Build Operation
     InvokeContractHostFunction hostFunction = InvokeContractHostFunction(
       getContractID(),
-      functionName,
+      CowchainFunction.sellCow.name(),
       arguments: arguments,
     );
     InvokeHostFunctionOperation functionOperation = InvokeHostFuncOpBuilder(hostFunction).build();
@@ -136,7 +132,7 @@ class CowContract {
     if (txResponse.status == GetTransactionResponse.STATUS_SUCCESS) {
       XdrSCVal? resVal = txResponse.getResultValue();
       if (resVal == null || resVal.map == null) return (SellCowResult.zero(), AppMessages.noResult);
-      SellCowResult sellCowResult = await CowHelper.parseResult(CowFunction.sellCow, resVal);
+      SellCowResult sellCowResult = await CowHelper.parseResult(CowchainFunction.sellCow, resVal);
       return (sellCowResult, null);
     }
 
@@ -149,8 +145,6 @@ class CowContract {
     required String accountID,
     required String cowID,
   }) async {
-    String functionName = "cow_appraisal";
-
     // Retrieve Account Information
     AccountResponse account = await sdk.accounts.account(accountID);
 
@@ -162,7 +156,7 @@ class CowContract {
     // Build Operation
     InvokeContractHostFunction hostFunction = InvokeContractHostFunction(
       getContractID(),
-      functionName,
+      CowchainFunction.cowAppraisal.name(),
       arguments: arguments,
     );
     InvokeHostFunctionOperation functionOperation = InvokeHostFuncOpBuilder(hostFunction).build();
@@ -188,7 +182,7 @@ class CowContract {
         return (CowAppraisalResult.zero(), AppMessages.noResult);
       }
       CowAppraisalResult cowAppraisalResult =
-          await CowHelper.parseResult(CowFunction.cowAppraisal, resVal);
+          await CowHelper.parseResult(CowchainFunction.cowAppraisal, resVal);
       return (cowAppraisalResult, null);
     }
 
@@ -201,8 +195,6 @@ class CowContract {
     required String accountID,
     required String cowID,
   }) async {
-    String functionName = "feed_the_cow";
-
     // Retrieve Account Information
     AccountResponse account = await sdk.accounts.account(accountID);
 
@@ -215,7 +207,7 @@ class CowContract {
     // Build Operation
     InvokeContractHostFunction hostFunction = InvokeContractHostFunction(
       getContractID(),
-      functionName,
+      CowchainFunction.feedTheCow.name(),
       arguments: arguments,
     );
     InvokeHostFunctionOperation functionOperation = InvokeHostFuncOpBuilder(hostFunction).build();
@@ -241,7 +233,7 @@ class CowContract {
         return (FeedTheCowResult.zero(), AppMessages.noResult);
       }
       FeedTheCowResult feedTheCowResult =
-          await CowHelper.parseResult(CowFunction.feedTheCow, resVal);
+          await CowHelper.parseResult(CowchainFunction.feedTheCow, resVal);
       return (feedTheCowResult, null);
     }
 
@@ -253,8 +245,6 @@ class CowContract {
   static Future<(GetAllCowResult, String?)> invokeGetAllCow({
     required String accountID,
   }) async {
-    String functionName = "get_all_cow";
-
     // Retrieve Account Information
     AccountResponse account = await sdk.accounts.account(accountID);
 
@@ -266,7 +256,7 @@ class CowContract {
     // Build Operation
     InvokeContractHostFunction hostFunction = InvokeContractHostFunction(
       getContractID(),
-      functionName,
+      CowchainFunction.getAllCow.name(),
       arguments: arguments,
     );
     InvokeHostFunctionOperation functionOperation = InvokeHostFuncOpBuilder(hostFunction).build();
@@ -294,7 +284,8 @@ class CowContract {
     if (resVal == null || resVal.map == null) {
       return (GetAllCowResult.zero(), AppMessages.noResult);
     }
-    GetAllCowResult getAllCowResult = await CowHelper.parseResult(CowFunction.getAllCow, resVal);
+    GetAllCowResult getAllCowResult =
+        await CowHelper.parseResult(CowchainFunction.getAllCow, resVal);
     return (getAllCowResult, null);
   }
 }

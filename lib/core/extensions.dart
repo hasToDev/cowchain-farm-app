@@ -98,3 +98,20 @@ extension StatusX on String {
     };
   }
 }
+
+extension CowFunctionStringX on CowchainFunction {
+  /// [name] retrieve CowBreed string value
+  String name() {
+    return switch (this) {
+      CowchainFunction.buyCow => 'buy_cow',
+      CowchainFunction.sellCow => 'sell_cow',
+      CowchainFunction.cowAppraisal => 'cow_appraisal',
+      CowchainFunction.feedTheCow => 'feed_the_cow',
+      CowchainFunction.getAllCow => 'get_all_cow',
+      CowchainFunction.registerAuction => 'register_auction',
+      CowchainFunction.bidding => 'bidding',
+      CowchainFunction.finalizeAuction => 'finalize_auction',
+      CowchainFunction.getAllAuction => 'get_all_auction',
+    };
+  }
+}
