@@ -1,3 +1,4 @@
+export 'auction_page.dart';
 export 'credit_page.dart';
 export 'farm_page.dart';
 export 'home_page.dart';

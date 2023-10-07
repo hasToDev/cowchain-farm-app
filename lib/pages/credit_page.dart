@@ -4,7 +4,6 @@ import 'package:cowchain_farm/helpers/html_stub_helper.dart' if (dart.library.ht
 import 'package:cowchain_farm/main.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 class CreditPage extends StatefulWidget {
   const CreditPage({super.key});
@@ -14,16 +13,6 @@ class CreditPage extends StatefulWidget {
 }
 
 class _CreditPageState extends State<CreditPage> {
-  late TextEditingController controller;
-  String accountID = '';
-
-  @override
-  void initState() {
-    super.initState();
-    controller = TextEditingController();
-    accountID = context.read<CowProvider>().accountID;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,6 +109,10 @@ class _CreditPageState extends State<CreditPage> {
                     creditLink(
                       'Cow logo Image by Freepik',
                       'https://www.freepik.com/free-vector/hand-drawn-cow-logo-design_29679258.htm',
+                    ),
+                    creditLink(
+                      'Gender logo Image by Freepik',
+                      'https://www.freepik.com/free-vector/flat-pride-month-lgbt-symbols-collection_25967237.htm',
                     ),
                     const SizedBox(height: 16),
                   ],

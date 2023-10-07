@@ -29,4 +29,7 @@ class AppMessages {
   static String unableToFinalize = 'Unable to finalize. Bidding is still open.';
   static String mustBidHigher = 'You must bid higher price.';
   static String nameExist = 'Name already exists. Please choose another name.';
+  static String biddingPrice = 'Please enter your bid price.';
+  static String auctionStartPrice = 'Please enter your auction start price.';
+  static String zeroPrice = 'The price cannot be zero.';
 }

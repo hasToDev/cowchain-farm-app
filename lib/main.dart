@@ -43,6 +43,9 @@ class DApps extends StatelessWidget {
       providerList.add(ChangeNotifierProvider<CowProvider>(
         create: (_) => CowProvider(),
       ));
+      providerList.add(ChangeNotifierProvider<AuctionProvider>(
+        create: (_) => AuctionProvider(),
+      ));
     } else if (Platform.isAndroid || Platform.isIOS) {
       providerList.add(ChangeNotifierProvider<NotificationProvider>(
         create: (_) => NotificationProvider(),
@@ -109,6 +112,12 @@ class DApps extends StatelessWidget {
         path: "/notification",
         pageBuilder: (BuildContext context, GoRouterState state) {
           return customTransitionPage(state, const NotificationPage());
+        },
+      ),
+      GoRoute(
+        path: "/auction",
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return customTransitionPage(state, const AuctionPage());
         },
       ),
     ],

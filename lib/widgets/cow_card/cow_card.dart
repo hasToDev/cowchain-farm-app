@@ -14,11 +14,13 @@ class CowCard extends StatelessWidget {
     super.key,
     required this.data,
     required this.onSell,
+    required this.onAuction,
     required this.onFeed,
   });
 
   final CowData data;
   final VoidCallback onSell;
+  final VoidCallback onAuction;
   final VoidCallback onFeed;
 
   @override
@@ -181,6 +183,42 @@ class CowCard extends StatelessWidget {
                     },
                   ),
                 ),
+                Center(
+                  child: LayoutBuilder(
+                      builder: (BuildContext context, BoxConstraints outerConstraints) {
+                    Widget gender = Container(
+                      width: 60,
+                      decoration: const BoxDecoration(
+                        color: Color.fromRGBO(251, 253, 251, 1),
+                      ),
+                      child: LayoutBuilder(
+                        builder: (BuildContext context, BoxConstraints constraints) {
+                          double padding = constraints.maxWidth * 0.15;
+                          return Padding(
+                            padding: EdgeInsets.fromLTRB(padding, 16, padding, 0),
+                            child: Image.asset(
+                              data.gender.imageURL(),
+                              height: constraints.maxWidth - padding,
+                              width: constraints.maxWidth - padding,
+                              fit: BoxFit.contain,
+                              gaplessPlayback: true,
+                              alignment: Alignment.topCenter,
+                              filterQuality: FilterQuality.high,
+                            ),
+                          );
+                        },
+                      ),
+                    );
+
+                    List<Widget> genderList = [gender, gender, gender];
+                    if (outerConstraints.maxWidth < 182) genderList = [gender, gender];
+                    if (outerConstraints.maxWidth < 122) genderList = [gender];
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: genderList,
+                    );
+                  }),
+                ),
                 Selector<CowProvider, int>(
                   selector: (context, cowProvider) => cowProvider.sequence,
                   builder: (BuildContext context, int sequence, Widget? child) {
@@ -193,6 +231,7 @@ class CowCard extends StatelessWidget {
                 ),
                 CowActionButtons(
                   onSell: onSell,
+                  onAuction: onAuction,
                   onFeed: onFeed,
                 ),
               ],

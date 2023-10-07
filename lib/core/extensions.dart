@@ -144,3 +144,13 @@ extension StatusMessageX on Status {
     };
   }
 }
+
+extension CowGenderX on CowGender {
+  /// [imageURL] retrieve CowGender image asset path
+  String imageURL() {
+    return switch (this) {
+      CowGender.male => 'assets/male.png',
+      CowGender.female => 'assets/female.png',
+    };
+  }
+}

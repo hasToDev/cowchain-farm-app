@@ -26,6 +26,12 @@ class _MarketPageState extends State<MarketPage> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
@@ -66,12 +72,14 @@ class _MarketPageState extends State<MarketPage> {
                                   double maxWidth = constraints.maxWidth;
                                   double leftPad = 0;
                                   double rightPad = 0;
-                                  if (maxWidth >= 608) {
-                                    leftPad = maxWidth - 608;
-                                  } else if (maxWidth >= 386 && maxWidth < 608) {
-                                    rightPad = maxWidth - 386;
-                                  } else if (maxWidth >= 240 && maxWidth < 386) {
-                                    rightPad = maxWidth - 240;
+                                  if (maxWidth >= 684) {
+                                    leftPad = maxWidth - 684;
+                                  } else if (maxWidth >= 460 && maxWidth < 684) {
+                                    rightPad = maxWidth - 460;
+                                  } else if (maxWidth >= 372 && maxWidth < 460) {
+                                    rightPad = maxWidth - 372;
+                                  } else if (maxWidth >= 266 && maxWidth < 372) {
+                                    rightPad = maxWidth - 266;
                                   }
                                   return Padding(
                                     padding: EdgeInsets.only(
@@ -79,7 +87,9 @@ class _MarketPageState extends State<MarketPage> {
                                       right: rightPad,
                                     ),
                                     child: Wrap(
-                                      alignment: WrapAlignment.spaceBetween,
+                                      alignment: maxWidth < 372
+                                          ? WrapAlignment.start
+                                          : WrapAlignment.spaceBetween,
                                       runAlignment: WrapAlignment.spaceBetween,
                                       crossAxisAlignment: WrapCrossAlignment.center,
                                       runSpacing: 16,
@@ -123,10 +133,10 @@ class _MarketPageState extends State<MarketPage> {
   List<Widget> barActionButtons(BuildContext context) {
     return [
       Container(
-        width: 150,
+        width: 106,
         padding: const EdgeInsets.only(right: 24),
         child: AppGradientButton(
-          title: 'back to FARM',
+          title: 'FARM',
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -142,6 +152,26 @@ class _MarketPageState extends State<MarketPage> {
           onTap: () async {
             context.go('/farm');
           },
+        ),
+      ),
+      Container(
+        width: 120,
+        padding: const EdgeInsets.only(right: 24),
+        child: AppGradientButton(
+          title: 'AUCTION',
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.1, 0.35, 0.5, 0.65, 0.9],
+            colors: [
+              Color.fromRGBO(185, 102, 185, 1),
+              Color.fromRGBO(139, 0, 139, 1),
+              Color.fromRGBO(139, 0, 139, 1),
+              Color.fromRGBO(139, 0, 139, 1),
+              Color.fromRGBO(185, 102, 185, 1),
+            ],
+          ),
+          onTap: () async => context.go('/auction'),
         ),
       ),
       Container(
