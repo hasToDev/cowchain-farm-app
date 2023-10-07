@@ -35,45 +35,8 @@ class SorobanHelper {
     // Process Preflight Result
     XdrSCVal? resultValue = preflightResult.first.resultValue;
     if (resultValue == null) return (null, FormatException(AppMessages.tryAgainPreflight));
-    dynamic preParse = await CowHelper.parseResult(function, resultValue);
-    Status preStatus = Status.ok;
-    String preErrorMessage = '';
-
-    switch (function) {
-      case CowchainFunction.buyCow:
-        preStatus = (preParse as BuyCowResult).status;
-      case CowchainFunction.sellCow:
-        {
-          preStatus = (preParse as SellCowResult).status;
-          if (preStatus == Status.notFound) preErrorMessage = AppMessages.cowNotFound;
-          if (preStatus == Status.insufficientFund) {
-            preErrorMessage = AppMessages.insufficientMarketFund;
-          }
-        }
-      case CowchainFunction.cowAppraisal:
-        {
-          preStatus = (preParse as CowAppraisalResult).status;
-          if (preStatus == Status.notFound) preErrorMessage = AppMessages.cowNotFound;
-        }
-      case CowchainFunction.feedTheCow:
-        {
-          preStatus = (preParse as FeedTheCowResult).status;
-          if (preStatus == Status.notFound) preErrorMessage = AppMessages.cowNotFound;
-        }
-      case CowchainFunction.getAllCow:
-        preStatus = Status.ok; // do nothing, will only give empty result
-      case CowchainFunction.registerAuction:
-        {
-          preStatus = (preParse as AuctionResult).status;
-          if (preStatus == Status.notFound) preErrorMessage = AppMessages.cowNotFound;
-        }
-      case CowchainFunction.bidding:
-        preStatus = (preParse as AuctionResult).status;
-      case CowchainFunction.finalizeAuction:
-        preStatus = (preParse as AuctionResult).status;
-      case CowchainFunction.getAllAuction:
-        preStatus = Status.ok; // do nothing, will only give empty result
-    }
+    var (Status preStatus, String preErrorMessage) =
+        await CowHelper.checkPreflightStatus(function, resultValue);
 
     // Return error if preflight status not OK
     if (preStatus != Status.ok) {
