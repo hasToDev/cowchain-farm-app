@@ -19,7 +19,7 @@ class _AuctionPageState extends State<AuctionPage> {
     super.initState();
     accountID = context.read<CowProvider>().accountID;
     controller = TextEditingController();
-    // fetchAuctionData();
+    fetchAuctionData();
   }
 
   @override

@@ -15,7 +15,7 @@ access the smart contracts functionality built with one of the most popular cros
 frameworks, [Flutter](https://flutter.dev).
 
 Cowchain Farm smart contract will cover several capabilities of Soroban that exist in
-the [Preview 10 release](https://soroban.stellar.org/docs/reference/releases), which include:
+the [Preview 11 release](https://soroban.stellar.org/docs/reference/releases), which include:
 
 1. Authentication and authorization
 2. Error handling
@@ -24,18 +24,26 @@ the [Preview 10 release](https://soroban.stellar.org/docs/reference/releases), w
 5. Contract upgrading
 6. Payment transfer
 7. Data storage expiration
+8. Events
 
 While the Cowchain Farm web app will cover the following:
 
 1. Calling Soroban smart contract function using [Flutter Stellar SDK](https://pub.dev/packages/stellar_flutter_sdk)
 2. Communication with the [Freighter](https://www.freighter.app) browser extension
 
+And the latest addition is the Cowchain Farm notification service, which includes:
+
+1. Ingesting events from Soroban smart contracts using [Darts CLI](https://dart.dev/tutorials/server/get-started) with [Flutter Stellar SDK](https://pub.dev/packages/stellar_flutter_sdk)
+2. Sending notifications to Cowchain Farm users using [OneSignal](https://onesignal.com)
+
 ## Get Started
 
-This article is specifically about the Flutter web app for Cowchain Farm. Discussion of the Cowchain Farm smart contract
-is in the [Cowchain Farm Soroban repository](https://github.com/hasToDev/cowchain-farm-soroban).
+This article is specifically about the Flutter web app for Cowchain Farm.
 
-The Cowchain Farm web app in this repository was developed using `Flutter version 3.10.6` and `Dart version 3.0.6`
+Discussion for Cowchain Farm smart contract is in the [Cowchain Farm Soroban repository](https://github.com/hasToDev/cowchain-farm-soroban),
+and the discussion for Cowchain Farm Dart CLI notification service is in the [Cowchain Farm Alert repository](https://github.com/hasToDev/cowchain-farm-alert).
+
+The Cowchain Farm web app in this repository was developed using `Flutter version 3.13.5` and `Dart version 3.1.2`
 
 ## Clone, Run, Build, and Deploy
 
