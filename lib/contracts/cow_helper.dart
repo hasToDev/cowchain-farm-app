@@ -182,8 +182,11 @@ class CowHelper {
         int high = e.val.i128?.hi.int64 ?? 0;
         int low = e.val.i128?.lo.uint64 ?? 0;
         Int64 price64 = (Int64(1000000000) * Int64(high)) + Int64(low);
-        String price = (price64 ~/ Int64(10000000)).toString();
+        String price = price64.toString();
         if (price.isNotEmpty) auction.cowAuctionStartPrice = price;
+
+        // ? function below only needed if the return value is in stroops
+        // String price = (price64 ~/ Int64(10000000)).toString();
       }
       if (e.key.sym == 'highest_bidder' && e.val.map != null) {
         auction.cowHighestBidder = await getBidder(e.val.map!);
@@ -215,8 +218,11 @@ class CowHelper {
         int high = e.val.i128?.hi.int64 ?? 0;
         int low = e.val.i128?.lo.uint64 ?? 0;
         Int64 price64 = (Int64(1000000000) * Int64(high)) + Int64(low);
-        String price = (price64 ~/ Int64(10000000)).toString();
+        String price = price64.toString();
         if (price.isNotEmpty) bidder.cowPrice = price;
+
+        // ? function below only needed if the return value is in stroops
+        // String price = (price64 ~/ Int64(10000000)).toString();
       }
     }
     return bidder;

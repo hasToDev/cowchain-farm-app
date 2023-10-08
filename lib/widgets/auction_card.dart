@@ -196,15 +196,13 @@ class AuctionCard extends StatelessWidget {
                   child: Wrap(
                     children: [
                       Builder(builder: (context) {
-                        int startPrice = int.tryParse(data.startPrice) ?? 0;
                         int highestBid = int.tryParse(data.highestBidder.price) ?? 0;
-
-                        int bidPrice = highestBid;
-                        if (startPrice > highestBid) bidPrice = startPrice;
+                        int startPrice = int.tryParse(data.startPrice) ?? 0;
+                        if (startPrice > highestBid) highestBid = startPrice;
 
                         return SubInfoAuctionCard(
                           title: 'CURRENT BID',
-                          value: bidPrice.toString(),
+                          value: highestBid.toString(),
                           maxWidth: 150,
                         );
                       }),
