@@ -72,7 +72,7 @@ class _AuctionPageState extends State<AuctionPage> {
                             runSpacing: 16,
                             children: [
                               Text(
-                                'Cowchain FARM',
+                                'Cowchain AUCTION',
                                 style: context.style.headlineSmall?.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
