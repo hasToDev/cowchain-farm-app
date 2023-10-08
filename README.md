@@ -55,11 +55,20 @@ The Cowchain Farm web app in this repository was developed using `Flutter versio
     ```dart
     flutter run --web-renderer canvaskit -d web-server --web-port 45454
     ```
-5. Generate the release build:
+5. Generate the release build for Cowchain Farm Web app:
     ```dart
+    flutter clean
+    flutter pub get
     flutter build web --web-renderer canvaskit --release
     ```
-6. You can follow the following articles to deploy the web app to GitHub pages:
+6. Generate the release build for Cowchain Farm Mobile notification app:
+    ```dart
+    flutter clean
+    flutter pub get
+    flutter build apk --release
+    ```   
+
+7. You can follow the following articles to deploy the web app to GitHub pages:
 
     - [Simple way to deploy a Flutter Web Application on GitHub](https://flutterawesome.com/simple-way-to-deploy-a-flutter-web-application-on-github/)
     - [Publishing your Flutter apps into GitHub pages](https://dev.to/rodrigocastro_o/publishing-your-flutter-apps-into-github-pages-1l61)
