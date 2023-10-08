@@ -85,9 +85,9 @@ class _AuctionPageState extends State<AuctionPage> {
                                   double maxWidth = constraints.maxWidth;
                                   double leftPad = 0;
                                   double rightPad = 0;
-                                  if (maxWidth >= 530) {
-                                    leftPad = maxWidth - 530;
-                                  } else if (maxWidth >= 340 && maxWidth < 530) {
+                                  if (maxWidth >= 568) {
+                                    leftPad = maxWidth - 568;
+                                  } else if (maxWidth >= 340 && maxWidth < 568) {
                                     rightPad = maxWidth - 340;
                                   } else if (maxWidth >= 252 && maxWidth < 340) {
                                     rightPad = maxWidth - 252;

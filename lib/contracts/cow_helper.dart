@@ -266,6 +266,7 @@ class CowHelper {
         {
           preStatus = (preParse as AuctionResult).status;
           if (preStatus == Status.notFound) preErrorMessage = AppMessages.cowNotFound;
+          if (preStatus == Status.onAuction) preErrorMessage = AppMessages.cannotRegisterTwice;
         }
       case CowchainFunction.bidding:
         preStatus = (preParse as AuctionResult).status;
