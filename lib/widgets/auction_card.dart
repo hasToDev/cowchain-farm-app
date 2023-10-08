@@ -195,11 +195,19 @@ class AuctionCard extends StatelessWidget {
                   width: 100,
                   child: Wrap(
                     children: [
-                      SubInfoAuctionCard(
-                        title: 'CURRENT BID',
-                        value: data.highestBidder.price,
-                        maxWidth: 150,
-                      ),
+                      Builder(builder: (context) {
+                        int startPrice = int.tryParse(data.startPrice) ?? 0;
+                        int highestBid = int.tryParse(data.highestBidder.price) ?? 0;
+
+                        int bidPrice = highestBid;
+                        if (startPrice > highestBid) bidPrice = startPrice;
+
+                        return SubInfoAuctionCard(
+                          title: 'CURRENT BID',
+                          value: bidPrice.toString(),
+                          maxWidth: 150,
+                        );
+                      }),
                     ],
                   ),
                 ),
