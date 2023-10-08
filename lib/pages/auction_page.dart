@@ -19,7 +19,7 @@ class _AuctionPageState extends State<AuctionPage> {
     super.initState();
     accountID = context.read<CowProvider>().accountID;
     controller = TextEditingController();
-    fetchAuctionData();
+    // fetchAuctionData();
   }
 
   @override
@@ -85,14 +85,14 @@ class _AuctionPageState extends State<AuctionPage> {
                                   double maxWidth = constraints.maxWidth;
                                   double leftPad = 0;
                                   double rightPad = 0;
-                                  if (maxWidth >= 574) {
-                                    leftPad = maxWidth - 574;
-                                  } else if (maxWidth >= 384 && maxWidth < 574) {
-                                    rightPad = maxWidth - 384;
-                                  } else if (maxWidth >= 298 && maxWidth < 384) {
-                                    rightPad = maxWidth - 298;
-                                  } else if (maxWidth >= 192 && maxWidth < 298) {
-                                    rightPad = maxWidth - 192;
+                                  if (maxWidth >= 530) {
+                                    leftPad = maxWidth - 530;
+                                  } else if (maxWidth >= 340 && maxWidth < 530) {
+                                    rightPad = maxWidth - 340;
+                                  } else if (maxWidth >= 252 && maxWidth < 340) {
+                                    rightPad = maxWidth - 252;
+                                  } else if (maxWidth >= 146 && maxWidth < 252) {
+                                    rightPad = maxWidth - 146;
                                   }
                                   return Padding(
                                     padding: EdgeInsets.only(
