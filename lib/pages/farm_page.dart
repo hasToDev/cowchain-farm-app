@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:cowchain_farm/main.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart' show Util;
 
 class FarmPage extends StatefulWidget {
   const FarmPage({super.key});
@@ -11,12 +15,20 @@ class FarmPage extends StatefulWidget {
 }
 
 class _FarmPageState extends State<FarmPage> {
+  late TextEditingController controller;
   String accountID = '';
 
   @override
   void initState() {
     super.initState();
+    controller = TextEditingController();
     accountID = context.read<CowProvider>().accountID;
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -60,14 +72,14 @@ class _FarmPageState extends State<FarmPage> {
                                   double maxWidth = constraints.maxWidth;
                                   double leftPad = 0;
                                   double rightPad = 0;
-                                  if (maxWidth >= 574) {
-                                    leftPad = maxWidth - 574;
-                                  } else if (maxWidth >= 384 && maxWidth < 574) {
+                                  if (maxWidth >= 662) {
+                                    leftPad = maxWidth - 662;
+                                  } else if (maxWidth >= 472 && maxWidth < 662) {
+                                    rightPad = maxWidth - 472;
+                                  } else if (maxWidth >= 384 && maxWidth < 472) {
                                     rightPad = maxWidth - 384;
-                                  } else if (maxWidth >= 298 && maxWidth < 384) {
-                                    rightPad = maxWidth - 298;
-                                  } else if (maxWidth >= 192 && maxWidth < 298) {
-                                    rightPad = maxWidth - 192;
+                                  } else if (maxWidth >= 280 && maxWidth < 384) {
+                                    rightPad = maxWidth - 280;
                                   }
                                   return Padding(
                                     padding: EdgeInsets.only(
@@ -75,7 +87,9 @@ class _FarmPageState extends State<FarmPage> {
                                       right: rightPad,
                                     ),
                                     child: Wrap(
-                                      alignment: WrapAlignment.spaceBetween,
+                                      alignment: maxWidth < 384
+                                          ? WrapAlignment.start
+                                          : WrapAlignment.spaceBetween,
                                       runAlignment: WrapAlignment.spaceBetween,
                                       crossAxisAlignment: WrapCrossAlignment.center,
                                       runSpacing: 16,
@@ -126,6 +140,7 @@ class _FarmPageState extends State<FarmPage> {
                           return CowCard(
                             data: data,
                             onSell: () async => await sellingCow(context, data),
+                            onAuction: () async => await startCowAuction(context, data),
                             onFeed: () async => await feedTheCow(context, data),
                           );
                         }).toList();
@@ -160,10 +175,10 @@ class _FarmPageState extends State<FarmPage> {
   List<Widget> barActionButtons(BuildContext context) {
     return [
       Container(
-        width: 150,
+        width: 116,
         padding: const EdgeInsets.only(right: 24),
         child: AppGradientButton(
-          title: 'go to MARKET',
+          title: 'MARKET',
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -179,6 +194,26 @@ class _FarmPageState extends State<FarmPage> {
           onTap: () async {
             context.go('/market');
           },
+        ),
+      ),
+      Container(
+        width: 120,
+        padding: const EdgeInsets.only(right: 24),
+        child: AppGradientButton(
+          title: 'AUCTION',
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.1, 0.35, 0.5, 0.65, 0.9],
+            colors: [
+              Color.fromRGBO(185, 102, 185, 1),
+              Color.fromRGBO(139, 0, 139, 1),
+              Color.fromRGBO(139, 0, 139, 1),
+              Color.fromRGBO(139, 0, 139, 1),
+              Color.fromRGBO(185, 102, 185, 1),
+            ],
+          ),
+          onTap: () async => context.go('/auction'),
         ),
       ),
       Container(
@@ -243,10 +278,6 @@ class _FarmPageState extends State<FarmPage> {
 
     // Call dialog if error exist.
     String? errorMessage = errorAppraisal;
-    if (appraisal.status != Status.ok) {
-      // Check for specific error status returned from contract.
-      if (appraisal.status == Status.notFound) errorMessage = AppMessages.cowNotFound;
-    }
     if (errorMessage != null && context.mounted) {
       DialogHelper.failures(context, errorMessage);
       return;
@@ -273,16 +304,6 @@ class _FarmPageState extends State<FarmPage> {
 
     // Call dialog if error exist.
     errorMessage = error;
-    if (result.status != Status.ok) {
-      // Check for specific error status returned from contract.
-      if (result.status == Status.notInitialized) errorMessage = AppMessages.contractNotInitialized;
-      if (result.status == Status.notFound) errorMessage = AppMessages.cowNotFound;
-      if (result.status == Status.missingOwnership) errorMessage = AppMessages.cowNotFound;
-      if (result.status == Status.underage) errorMessage = AppMessages.underageCow;
-      if (result.status == Status.insufficientFund) {
-        errorMessage = AppMessages.insufficientMarketFund;
-      }
-    }
     if (errorMessage != null && context.mounted) {
       DialogHelper.failures(context, errorMessage);
       return;
@@ -312,12 +333,6 @@ class _FarmPageState extends State<FarmPage> {
 
     // Call dialog if error exist.
     String? errorMessage = error;
-    if (result.status != Status.ok) {
-      // Check for specific error status returned from contract.
-      if (result.status == Status.notFound) errorMessage = AppMessages.cowNotFound;
-      if (result.status == Status.missingOwnership) errorMessage = AppMessages.cowNotFound;
-      if (result.status == Status.fullStomach) errorMessage = AppMessages.cowStillFull;
-    }
     if (errorMessage != null && context.mounted) {
       DialogHelper.failures(context, errorMessage);
       return;
@@ -326,6 +341,79 @@ class _FarmPageState extends State<FarmPage> {
     // Update cow data.
     if (context.mounted) {
       context.read<CowProvider>().updateCowLastFed(data, result.lastFedLedger);
+    }
+  }
+
+  /// [startCowAuction]
+  /// A set of function for calling register_auction method on Cowchain Farm contract.
+  Future<void> startCowAuction(BuildContext context, CowData data) async {
+    // Ask for Start price.
+    bool? isPriceConfirmed = await DialogHelper.forAuctionRegisterOrBidding(
+      context,
+      controller,
+      'What is your starting auction price?',
+    );
+
+    // Check to ensure price not empty.
+    if (isPriceConfirmed == null || !isPriceConfirmed) {
+      controller.clear();
+      return;
+    }
+    if (context.mounted && controller.text.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        DialogHelper.failures(context, AppMessages.auctionStartPrice);
+      });
+      return;
+    }
+
+    // Check for zero auction price.
+    int startPrice = int.tryParse(controller.text) ?? 0;
+    if (context.mounted && startPrice <= 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        controller.clear();
+        DialogHelper.failures(context, AppMessages.zeroPrice);
+      });
+      return;
+    }
+
+    // Show waiting dialog.
+    if (context.mounted) {
+      controller.clear();
+      DialogHelper.waiting(context);
+    }
+
+    // Cow auction registration process.
+    const String event = 'auction';
+    String randomStr = Util.createCryptoRandomString(25);
+    List<int> bytes = utf8.encode(accountID + data.id + randomStr + event);
+    Digest digest = sha1.convert(bytes);
+    String auctionID = digest.toString();
+
+    var (AuctionResult register, String? errorRegister) = await CowContract.invokeRegisterAuction(
+      accountID: accountID,
+      cowID: data.id,
+      auctionID: auctionID,
+      price: startPrice,
+    );
+
+    // Pop current dialog and wait 100ms before continue.
+    if (context.mounted) {
+      Navigator.pop(context);
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+
+    // Call dialog if error exist.
+    String? errorMessage = errorRegister;
+    if (errorMessage != null && context.mounted) {
+      DialogHelper.failures(context, errorMessage);
+      return;
+    }
+
+    // Add new auction data.
+    if (context.mounted) {
+      context.read<AuctionProvider>().addNewAuctionData(register.auctionData.first);
+
+      DialogHelper.successes(context, 'Your cow is being auctioned.');
     }
   }
 }

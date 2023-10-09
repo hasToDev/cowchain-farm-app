@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../contracts/cow_contract.dart';
-import 'models.dart';
+import '../../contracts/cow_contract.dart';
+import '../models.dart';
 
 class CowProvider extends ChangeNotifier {
   Timer? periodicUpdate;

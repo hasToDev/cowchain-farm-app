@@ -31,4 +31,26 @@ enum Status {
   underage,
   missingOwnership,
   fullStomach,
+  onAuction,
+  bidIsClosed,
+  bidIsOpen,
+  cannotBidLower,
+  nameAlreadyExist,
+}
+
+enum CowchainFunction {
+  buyCow,
+  sellCow,
+  cowAppraisal,
+  feedTheCow,
+  getAllCow,
+  registerAuction,
+  bidding,
+  finalizeAuction,
+  getAllAuction,
+}
+
+enum CowGender {
+  male,
+  female,
 }
