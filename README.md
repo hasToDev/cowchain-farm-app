@@ -145,6 +145,14 @@ Once the auction has reached the time limit, you can claim the auction result ma
 
 ## Notification App
 
+<br>
+<div align="center">
+<img src="notification-1.jpg" alt="1" width="380">
+&nbsp;&nbsp;
+<img src="notification-2.jpg" alt="2" width="380">
+</div>
+<br>
+
 A new notification app is now available for the TESTNET version of Cowchain Farm.
 
 You will now be notified if you install the app and register your Account ID or Public Key of your Stellar TESTNET account in the app.
@@ -160,7 +168,7 @@ There are 2 ways you can install the app:
 1. Clone this repository, build the Android APK, and install directly to your phone.
 2. Download the prebuilt Android APK at [this DropBox link](https://www.dropbox.com/scl/fi/q6qksqguoi30dgfo3t5c2/cowchain_farm_200.apk?rlkey=7n0xadf3j6r01hp65jxsdo0fo&raw=1).
 
-Due to some development limitations, for now the app is only available on Android. 
+Due to some development limitations, for now the app is only available on Android.
 
 ## License
 
