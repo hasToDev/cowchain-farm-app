@@ -250,7 +250,8 @@ class AuctionCard extends StatelessWidget {
                     children: [
                       SubInfoAuctionCard(
                         title: 'COUNTDOWN',
-                        value: numLedgerToAuctionLimit.toString(),
+                        value:
+                            numLedgerToAuctionLimit < 0 ? '0' : numLedgerToAuctionLimit.toString(),
                         maxWidth: 150,
                       ),
                     ],
