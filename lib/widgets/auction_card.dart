@@ -284,6 +284,11 @@ class AuctionCard extends StatelessWidget {
                       backgroundColor = const Color.fromRGBO(2, 117, 216, 1);
                     } else if (status == 'CLOSED') {
                       backgroundColor = const Color.fromRGBO(173, 167, 172, 0.7);
+                      // filter for claim our own cow when no bids present
+                      if (bidNumber == 0 && accountID == data.owner.accountId) {
+                        buttonTitle = 'Claim';
+                        backgroundColor = const Color.fromRGBO(2, 117, 216, 1);
+                      }
                     }
 
                     return AppButton(
@@ -291,6 +296,7 @@ class AuctionCard extends StatelessWidget {
                       smaller: true,
                       backgroundColor: backgroundColor,
                       onTap: () async {
+                        if (status == 'CLOSED' && buttonTitle == 'Claim') onClaim.call();
                         if (status == 'CLOSED') return;
                         if (status == 'OPEN') {
                           onBid.call();
