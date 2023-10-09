@@ -49,6 +49,17 @@ class AuctionCard extends StatelessWidget {
     int bidNumber = 0;
     if (data.bidHistory.isNotEmpty) bidNumber = data.bidHistory.length;
 
+    String owner = data.owner.accountId ?? '-';
+    String highestBidder = data.highestBidder.user.accountId ?? '-';
+    if (owner != '-' && highestBidder != '-' && owner == highestBidder) {
+      highestBidder = '-';
+    }
+    if (highestBidder != '-') {
+      String short =
+          '${highestBidder.substring(0, 5)}${highestBidder.substring(highestBidder.length - 5)}';
+      highestBidder = short;
+    }
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: const BoxDecoration(
@@ -216,6 +227,30 @@ class AuctionCard extends StatelessWidget {
                       SubInfoAuctionCard(
                         title: 'BID NUMBER',
                         value: bidNumber.toString(),
+                        maxWidth: 150,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: Wrap(
+                    children: [
+                      SubInfoAuctionCard(
+                        title: 'HIGHEST BIDDER',
+                        value: highestBidder,
+                        maxWidth: 150,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: Wrap(
+                    children: [
+                      SubInfoAuctionCard(
+                        title: 'COUNTDOWN',
+                        value: numLedgerToAuctionLimit.toString(),
                         maxWidth: 150,
                       ),
                     ],

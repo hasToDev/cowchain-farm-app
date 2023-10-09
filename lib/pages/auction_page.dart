@@ -167,7 +167,9 @@ class _AuctionPageState extends State<AuctionPage> {
                         }).toList();
 
                         double padding = 0;
-                        if (constraints.maxWidth >= 965) padding = (constraints.maxWidth - 965) / 2;
+                        if (constraints.maxWidth >= 1065) {
+                          padding = (constraints.maxWidth - 1065) / 2;
+                        }
 
                         return Padding(
                           padding: EdgeInsets.symmetric(horizontal: padding),
