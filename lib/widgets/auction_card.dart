@@ -52,7 +52,7 @@ class AuctionCard extends StatelessWidget {
     String owner = data.owner.accountId ?? '-';
     String highestBidder = data.highestBidder.user.accountId ?? '-';
     if (owner != '-' && highestBidder != '-' && owner == highestBidder) {
-      highestBidder = '-';
+      if (bidNumber == 0) highestBidder = '-';
     }
     if (highestBidder != '-') {
       String short =
