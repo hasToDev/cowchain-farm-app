@@ -457,11 +457,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: fix-platform
-      resolved-ref: "55cfe3897042c551e85f661709ceeb6bad4d3cae"
+      ref: preamble-fix
+      resolved-ref: b74f855f3469967fb06a64ee7d7cb8ea4dc0dae9
       url: "git://github.com/hasToDev/stellar_flutter_sdk.git"
     source: git
-    version: "1.6.5"
+    version: "1.6.9"
   stream_channel:
     dependency: transitive
     description:

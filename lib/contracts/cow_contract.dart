@@ -71,6 +71,7 @@ class CowContract {
     // Submit Transaction
     var (GetTransactionResponse? txResponse, FormatException? error) = await SorobanHelper.submitTx(
       server: server,
+      sdk: sdk,
       operation: functionOperation,
       account: account,
       function: function,
@@ -122,6 +123,7 @@ class CowContract {
     // Submit Transaction
     var (GetTransactionResponse? txResponse, FormatException? error) = await SorobanHelper.submitTx(
       server: server,
+      sdk: sdk,
       operation: functionOperation,
       account: account,
       function: function,
@@ -172,6 +174,7 @@ class CowContract {
     // Submit Transaction
     var (GetTransactionResponse? txResponse, FormatException? error) = await SorobanHelper.submitTx(
       server: server,
+      sdk: sdk,
       operation: functionOperation,
       account: account,
       function: function,
@@ -226,6 +229,7 @@ class CowContract {
     // Submit Transaction
     var (GetTransactionResponse? txResponse, FormatException? error) = await SorobanHelper.submitTx(
       server: server,
+      sdk: sdk,
       operation: functionOperation,
       account: account,
       function: function,
@@ -335,6 +339,7 @@ class CowContract {
     // Submit Transaction
     var (GetTransactionResponse? txResponse, FormatException? error) = await SorobanHelper.submitTx(
       server: server,
+      sdk: sdk,
       operation: functionOperation,
       account: account,
       function: function,
@@ -389,6 +394,7 @@ class CowContract {
     // Submit Transaction
     var (GetTransactionResponse? txResponse, FormatException? error) = await SorobanHelper.submitTx(
       server: server,
+      sdk: sdk,
       operation: functionOperation,
       account: account,
       function: function,
@@ -439,6 +445,7 @@ class CowContract {
     // Submit Transaction
     var (GetTransactionResponse? txResponse, FormatException? error) = await SorobanHelper.submitTx(
       server: server,
+      sdk: sdk,
       operation: functionOperation,
       account: account,
       function: function,

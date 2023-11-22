@@ -33,4 +33,5 @@ class AppMessages {
   static String auctionStartPrice = 'Please enter your auction start price.';
   static String zeroPrice = 'The price cannot be zero.';
   static String cannotRegisterTwice = 'Unable to register. Your cow already on auction.';
+  static String footprintRestored = 'Your account has just been restored. Please try once more.';
 }

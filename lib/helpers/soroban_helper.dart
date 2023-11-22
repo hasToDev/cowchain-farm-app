@@ -10,6 +10,7 @@ class SorobanHelper {
 
   static Future<(GetTransactionResponse?, FormatException?)> submitTx({
     required SorobanServer server,
+    required StellarSDK sdk,
     required InvokeHostFunctionOperation operation,
     required AccountResponse account,
     required CowchainFunction function,
@@ -44,16 +45,28 @@ class SorobanHelper {
       return (null, FormatException(preErrorMessage));
     }
 
-    // Continue to Sign
-    transaction.addResourceFee((simulateResponse.minResourceFee ?? 440000000) * 2);
-    transaction.sorobanTransactionData = simulateResponse.transactionData;
-    if (useAuth) transaction.setSorobanAuth(simulateResponse.sorobanAuth);
+    // Check for Footprint Restoration
+    bool isRestoreFootPrint = false;
+    if (simulateResponse.restorePreamble != null) {
+      // Must restore footprint
+      isRestoreFootPrint = true;
+      account = await sdk.accounts.account(account.accountId);
+      RestoreFootprintOperation restoreOp = RestoreFootprintOperationBuilder().build();
+      transaction = TransactionBuilder(account).addOperation(restoreOp).build();
+      transaction.addResourceFee((simulateResponse.restorePreamble?.minResourceFee ?? 440000000) * 2);
+      transaction.sorobanTransactionData = simulateResponse.restorePreamble?.transactionData;
+    } else {
+      // Normal operation
+      transaction.addResourceFee((simulateResponse.minResourceFee ?? 440000000) * 2);
+      transaction.sorobanTransactionData = simulateResponse.transactionData;
+      if (useAuth) transaction.setSorobanAuth(simulateResponse.sorobanAuth);
+    }
 
+    // Continue to Sign
     if (kIsWeb) {
       // Sign Transaction using Freighter
-      var (List<XdrDecoratedSignature>? signatures, FreighterError? error) =
-          await requestAuthFromFreighter(
-              transaction: transaction, accountIDToSign: account.accountId, isTestNet: true);
+      var (List<XdrDecoratedSignature>? signatures, FreighterError? error) = await requestAuthFromFreighter(
+          transaction: transaction, accountIDToSign: account.accountId, isTestNet: true);
       if (error != null) return _freighterErrorHandler(error);
       transaction.signatures = signatures!;
     } else {
@@ -71,7 +84,7 @@ class SorobanHelper {
     if (checkError != null) return (null, checkError);
 
     // Poll Transaction Response
-    return await PollStatusHelper.get(server, sendTransactionResponse.hash!);
+    return await PollStatusHelper.get(server, sendTransactionResponse.hash!, isRestoreFootPrint);
   }
 
   static Future<(List<XdrDecoratedSignature>?, FreighterError?)> requestAuthFromFreighter({
@@ -80,8 +93,7 @@ class SorobanHelper {
     required bool isTestNet,
   }) async {
     // * is Freighter Connected
-    var (bool? isConnected, FreighterTimeout isConnectedTimeout) =
-        await FreighterHelper.isConnected();
+    var (bool? isConnected, FreighterTimeout isConnectedTimeout) = await FreighterHelper.isConnected();
     if (isConnectedTimeout) return (null, FreighterError.timeout);
     if (!isConnected!) {
       return (null, FreighterError.disconnect);
@@ -92,8 +104,7 @@ class SorobanHelper {
     if (isAllowedTimeout) return (null, FreighterError.timeout);
     if (!isAllowed!) {
       // * allow access Freighter
-      var (bool? setAllowed, FreighterTimeout setAllowedTimeout) =
-          await FreighterHelper.setAllowed();
+      var (bool? setAllowed, FreighterTimeout setAllowedTimeout) = await FreighterHelper.setAllowed();
       if (setAllowedTimeout) return (null, FreighterError.timeout);
       if (!setAllowed!) {
         return (null, FreighterError.accessDenied);
@@ -114,8 +125,7 @@ class SorobanHelper {
     }
 
     // * sign transaction with Freighter
-    var (String? signedTx, FreighterTimeout signedTxTimeout) =
-        await FreighterHelper.signTransaction(
+    var (String? signedTx, FreighterTimeout signedTxTimeout) = await FreighterHelper.signTransaction(
       transaction.toEnvelopeXdrBase64(),
       network,
       networkPassphrase,

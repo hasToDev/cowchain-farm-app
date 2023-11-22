@@ -11,6 +11,7 @@ class PollStatusHelper {
   static Future<(GetTransactionResponse?, FormatException?)> get(
     SorobanServer sorobanServer,
     String transactionId,
+    bool isRestoreFootPrint,
   ) async {
     FormatException? error;
     GetTransactionResponse? transactionResponse;
@@ -51,6 +52,7 @@ class PollStatusHelper {
     }
 
     if (error != null) return (null, error);
+    if (isRestoreFootPrint) return (null, FormatException(AppMessages.footprintRestored));
     return (transactionResponse, null);
   }
 }
